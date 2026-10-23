@@ -27,18 +27,18 @@
 
 ## 開發進度
 
-最後更新：2026-10-23
+最後更新：2026-10-24
 
 | 階段 | 狀態 | 備註 |
 | --- | --- | --- |
 | 1. 主要概念 | 大致完成 | 見 ideas.md；試用要驗證的假設尚未明確列出 |
 | 2. Brainstorm 功能 | 完成 | 候選功能記於 ideas.md |
 | 3. 找出主要功能 | 進行中 | MVP 情境已收斂為 5 個；投入時間與費用上限未訂 |
-| 4. 技術可行性評估 | 進行中 | 自訂地圖（MapLibre＋Protomaps/OSM）已驗證可行，見 custom-map-prototype.md；店家位置由使用者在地圖上點大概位置，不用任何地址轉座標服務；精確位置與導航透過使用者貼的 Google Maps 連結；其他依賴未評估 |
-| 5. 詳細需求 | 進行中 | 情境 1、2 已定案；亮度計分公式待議；情境 3～5 待討論，刪除與回憶已有大方向 |
+| 4. 技術可行性評估 | 大致完成 | 自訂地圖（MapLibre＋Protomaps/OSM）已驗證可行，見 custom-map-prototype.md；店家位置由使用者在地圖上點大概位置，不用任何地址轉座標服務；精確位置與導航透過使用者貼的 Google Maps 連結；技術選型已定，見 tech/stack.md；R2 Range／CORS 與 Google 短網址展開待實測 |
+| 5. 詳細需求 | 進行中 | 情境 0（註冊與登入）、1、2 已定案；亮度計分公式待議；情境 3～5 待討論，刪除與回憶已有大方向 |
 | 6～9 | 未開始 | |
 
-下一步：討論亮度計分公式，或情境 3「再次到訪」。
+下一步：情境 3～5 細節（入口、確認訊息、回憶頁唯讀、復活與永久刪除流程已有建議待回覆）與亮度計分公式；之後起草驗收條件、資料模型、權限規則。
 
 ## 文件安排
 
@@ -50,6 +50,8 @@
 - [user_stories/mvp-user-scenarios.md](user_stories/mvp-user-scenarios.md)：以 Mermaid 記錄 MVP 主要使用流程。
 - [user_stories/mvp-user-scenarios-detail.md](user_stories/mvp-user-scenarios-detail.md)：逐步討論 MVP 操作、輸入、結果與例外情境。
 - [tech/custom-map-prototype.md](tech/custom-map-prototype.md)：自訂台灣地圖技術驗證（用了什麼、來源、注意事項、地圖樣式）。
+- [tech/stack.md](tech/stack.md)：技術選型與開發規則。
+- [adr/](adr/)：難以反悔的架構決策紀錄。
 
 進入詳細需求階段，再按需要新增需求、設計及驗收紀錄，不先建立空文件。
 
