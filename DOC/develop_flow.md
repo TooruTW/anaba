@@ -37,7 +37,7 @@
 | 2. Brainstorm 功能 | 完成 | 候選功能記於 ideas.md |
 | 3. 找出主要功能 | 完成 | MVP 情境 0～5；時間不限，費用以免費方案為原則（目前全部免費：Supabase、Vercel Hobby、R2；網域與寄信等正式開放再說） |
 | 4. 技術可行性評估 | 完成 | 自訂地圖（MapLibre＋Protomaps/OSM）已驗證可行，見 custom-map-prototype.md；店家位置由使用者在地圖上點大概位置，不用任何地址轉座標服務；精確位置與導航透過使用者貼的 Google Maps 連結；技術選型已定，見 tech/stack.md；R2 經網路調查可行（建帳號時再確認）；Google 短網址展開已實測可行，見 google-short-url-test.md |
-| 5. 詳細需求 | 進行中 | 情境 0～5、亮度計分公式與驗收條件（mvp-acceptance.md）已定案；架構改為自建後端 API 與登入（ADR 0002） |
+| 5. 詳細需求 | 完成 | 情境 0～6、亮度計分公式與驗收條件（mvp-acceptance.md）已定案；架構改為自建後端 API 與登入（ADR 0002）；系統方核對只做管理 API，不做介面 |
 | 6～9 | 未開始 | |
 
 下一步：第 6 階段，資料模型、API 設計、畫面草圖與開發清單。
@@ -48,7 +48,7 @@
 
 - [brainstorm/ideas.md](brainstorm/ideas.md)：概念、功能發想、MVP 範圍與決策紀錄。
 - `develop_flow.md`：本開發流程。
-- [GLOSSARY.md](../GLOSSARY.md)：領域名詞定義（店家、足跡、到訪、評價等）。
+- [GLOSSARY.md](../GLOSSARY.md)：領域名詞定義（店家、私房店、到訪、評價等）。
 - [user_stories/mvp-user-scenarios.md](user_stories/mvp-user-scenarios.md)：以 Mermaid 記錄 MVP 主要使用流程。
 - [user_stories/mvp-user-scenarios-detail.md](user_stories/mvp-user-scenarios-detail.md)：逐步討論 MVP 操作、輸入、結果與例外情境。
 - [user_stories/mvp-acceptance.md](user_stories/mvp-acceptance.md)：MVP 驗收條件，第 8 階段逐項勾選。

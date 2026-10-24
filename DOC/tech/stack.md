@@ -16,7 +16,7 @@
 
 ## 規則
 
-- **權限**：足跡、到訪、筆記一律經過強制帶入目前使用者的資料存取函式，route 裡不直接查這些資料表；存取別人的資料一律回 404。資料表開 RLS 但不寫政策，只有後端的 service 連線能存取。
+- **權限**：到訪（含筆記）與回憶一律經過強制帶入目前使用者的資料存取函式，route 裡不直接查這些資料表；存取別人的資料一律回 404。資料表開 RLS 但不寫政策，只有後端的 service 連線能存取。
 - **密碼**：`crypto.scrypt` 加每人隨機 salt，比對用 `crypto.timingSafeEqual`。
 - **Session**：32 bytes 隨機 token，放在 httpOnly、Secure、SameSite=Lax 的 cookie；資料庫只存 token 的 SHA-256。一個月有效，每次使用往後延；登出、重設密碼時刪除，修改密碼時刪除其他裝置的 session。
 - **防暴力破解**：同一 email 連續登入失敗 10 次鎖 15 分鐘；錯誤訊息一律「email 或密碼錯誤」。ponytail：只依 email 計數，換 email 試不會被擋；正式開放時加 IP 限制。
