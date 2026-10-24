@@ -33,7 +33,7 @@
 
 | 階段 | 狀態 | 備註 |
 | --- | --- | --- |
-| 1. 主要概念 | 大致完成 | 見 ideas.md；試用要驗證的假設尚未明確列出 |
+| 1. 主要概念 | 完成 | 核心價值與試用假設 H1～H5 見 ideas.md 開頭 |
 | 2. Brainstorm 功能 | 完成 | 候選功能記於 ideas.md |
 | 3. 找出主要功能 | 完成 | MVP 情境 0～5；時間不限，費用以免費方案為原則（目前全部免費：Supabase、Vercel Hobby、R2；網域與寄信等正式開放再說） |
 | 4. 技術可行性評估 | 大致完成 | 自訂地圖（MapLibre＋Protomaps/OSM）已驗證可行，見 custom-map-prototype.md；店家位置由使用者在地圖上點大概位置，不用任何地址轉座標服務；精確位置與導航透過使用者貼的 Google Maps 連結；技術選型已定，見 tech/stack.md；R2 Range／CORS 與 Google 短網址展開待實測 |
