@@ -77,3 +77,14 @@ Google Fonts 會依 `unicode-range` 切檔，瀏覽器只下載頁面上用到�
 | 焦點 | 鍵盤焦點一律 2px `fire` 外框、間隔 2px |
 
 招牌時刻（開啟畫面、載入、篝火、送出動畫、空狀態）另外設計，見 stack.md「風格比重」。
+
+## 篝火元件
+
+外觀暫定，之後會改，所以**全 App 只能透過同一個元件畫篝火**，改一個檔案就全部生效。
+
+- 元件：`<Campfire level={1 | 2 | 3} />`，對應亮度一～三級；`burst` 屬性播一次送出到訪的竄高與火星（約 1.5 秒）。
+- 圖形：火焰、焰心、柴、光暈的 SVG 與漸層只寫在這個元件裡，來源為 `output/imagegen/campfire-three-states.svg`。火星數量：一級 0、二級 2、三級 6。
+- 使用處：地圖標記、送出到訪動畫。地圖標記用 MapLibre 的 HTML marker 放這個元件，不另外做 symbol 圖層的圖片版本。ponytail：HTML marker 在幾百個以內沒問題；同畫面上千個時再改 symbol 圖層，那時圖片也要從這個元件產生。
+- 空狀態的「沒點的柴」與開啟畫面的餘燼不是篝火等級，但柴的形狀共用這個元件匯出的圖形，不另外畫。
+- 開啟畫面寫在 HTML 裡、不等 JS，無法直接用 React 元件；它只有餘燼與火星，不畫火焰與柴，所以不受篝火改版影響。
+- 檢查：火焰的 SVG path 只能出現在篝火元件的檔案中（開發時以一行 grep 檢查）。試做見 `output/prototypes/signature-moments.html`。

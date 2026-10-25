@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>招牌時刻試做</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --bg: #121110; --line: #2c2926; --text: #efe4d6; --muted: #a69a8c; --faint: #8a7f74; --fire: #e07a2e;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #1a1816; color: #d8cfc2; font-family: "Noto Sans TC", system-ui, sans-serif; padding: 24px 16px 48px; }
+  h1 { font-size: 18px; margin-bottom: 4px; }
+  .lead { font-size: 14px; color: #9a9086; margin-bottom: 24px; max-width: 900px; }
+  .cols { display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; }
+  .col { width: 300px; max-width: 100%; }
+  .col h2 { font-size: 16px; margin-bottom: 4px; }
+  .col p { font-size: 14px; color: #9a9086; margin-bottom: 12px; min-height: 66px; }
+  .label { font-size: 12px; color: #8a7f74; margin: 14px 0 6px; letter-spacing: .1em; }
+
+  .phone { position: relative; height: 520px; border: 1px solid #333; border-radius: 4px; overflow: hidden;
+    background: var(--noise), var(--bg); background-blend-mode: soft-light, normal; }
+  .phone .brand { position: absolute; left: 0; right: 0; bottom: 64px; text-align: center; font-size: 14px; letter-spacing: .5em; color: var(--muted);
+    opacity: 0; animation: fade 1s 1.2s forwards; }
+  .replay { margin-top: 8px; min-height: 44px; width: 100%; background: none; border: 1px solid #444; border-radius: 4px; color: #d8cfc2; font: inherit; font-size: 14px; cursor: pointer; }
+
+  .loading { display: flex; align-items: center; gap: 14px; height: 72px; padding: 0 18px; border: 1px solid var(--line); border-radius: 4px;
+    background: var(--noise), var(--bg); background-blend-mode: soft-light, normal; font-size: 14px; color: var(--muted); }
+  .loading .box { position: relative; width: 40px; height: 40px; flex: none; }
+
+  @keyframes fade { to { opacity: 1; } }
+
+  /* A：火星上升 */
+  .spark { position: absolute; left: 50%; bottom: var(--y0, 150px); width: var(--s, 3px); height: var(--s, 3px); border-radius: 50%;
+    background: #ffc46b; box-shadow: 0 0 6px 1px rgba(224, 122, 46, .8); opacity: 0;
+    animation: rise var(--d, 3s) var(--delay, 0s) ease-out infinite; }
+  @keyframes rise {
+    0% { transform: translate(0, 0); opacity: 0; }
+    12% { opacity: 1; }
+    100% { transform: translate(var(--dx, 0), var(--h, -300px)); opacity: 0; }
+  }
+  .ember { position: absolute; left: 50%; bottom: 140px; width: 46px; height: 22px; transform: translateX(-50%); border-radius: 50%;
+    background: radial-gradient(ellipse, #ffcf7a 0%, #e07a2e 35%, rgba(184, 85, 46, .35) 65%, transparent 72%);
+    animation: glow 2.4s ease-in-out infinite; }
+  .loading .ember { bottom: 2px; width: 20px; height: 10px; }
+  @keyframes glow { 50% { opacity: .55; transform: translateX(-50%) scale(.9); } }
+
+  /* B：篝火呼吸 */
+  .campfire { position: absolute; left: 50%; bottom: 120px; width: 180px; transform: translateX(-50%); }
+  .loading .campfire { bottom: -2px; width: 40px; }
+  .campfire .flame { transform-box: fill-box; transform-origin: 50% 100%; animation: breathe 2.2s ease-in-out infinite; }
+  .campfire .core { transform-box: fill-box; transform-origin: 50% 100%; animation: breathe 1.6s .3s ease-in-out infinite; }
+  .phone .campfire .lit { transform-box: fill-box; transform-origin: 50% 100%; animation: ignite 1.4s ease-out both; }
+  @keyframes breathe { 50% { transform: scale(.94, 1.07); opacity: .88; } }
+  @keyframes ignite { from { transform: scale(.15); opacity: 0; } 40% { opacity: 1; } to { transform: scale(1); } }
+
+  /* C：地圖點燈 */
+  .roads { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .roads path { fill: none; stroke: var(--fire); stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1;
+    animation: draw var(--d, 1.2s) var(--delay, 0s) ease-out forwards; }
+  .roads circle { fill: #ffc46b; opacity: 0; animation: fade .6s 1.6s forwards; filter: drop-shadow(0 0 6px #e07a2e); }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .loading .roads path { animation: sweep 1.4s ease-in-out infinite; }
+  @keyframes sweep { 0% { stroke-dashoffset: 1; } 60% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -1; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0s !important; animation-delay: 0s !important; animation-iteration-count: 1 !important; }
+    .spark { display: none; }
+  }
+</style>
+</head>
+<body>
+<h1>招牌時刻試做：開啟畫面與一般載入</h1>
+<p class="lead">三個方向的核心圖形不同；之後的送出動畫、空狀態、回憶都從選定的圖形延伸。開啟畫面在真正使用時是「地圖載好就淡出」，這裡為了觀看會停住，可按重播。開啟系統「減少動態效果」時全部變成靜態。</p>
+
+<div class="cols">
+  <div class="col" data-kind="a">
+    <h2>A. 火星上升</h2>
+    <p>取自夜景參考圖：一小團餘燼，火星一顆顆往上飄。延伸：送出時從篝火噴出一串火星；回憶是灰燼往下落。</p>
+    <div class="label">開啟畫面</div>
+    <div class="phone"></div>
+    <button class="replay">重播</button>
+    <div class="label">一般載入</div>
+    <div class="loading"><div class="box"></div>載入中</div>
+  </div>
+
+  <div class="col" data-kind="b">
+    <h2>B. 篝火呼吸</h2>
+    <p>直接用你的篝火圖：開啟時從小火燒起來，之後火焰微微呼吸。延伸：送出時篝火升一級再回穩；空狀態是沒點的柴。</p>
+    <div class="label">開啟畫面</div>
+    <div class="phone"></div>
+    <button class="replay">重播</button>
+    <div class="label">一般載入</div>
+    <div class="loading"><div class="box"></div>載入中</div>
+  </div>
+
+  <div class="col" data-kind="c">
+    <h2>C. 地圖點燈</h2>
+    <p>取自地圖草圖：橘色道路從中心沿街亮開，最後中間點起一盞火。延伸：送出時光沿路跑到篝火；空狀態是亮著路、沒有火。</p>
+    <div class="label">開啟畫面</div>
+    <div class="phone"></div>
+    <button class="replay">重播</button>
+    <div class="label">一般載入</div>
+    <div class="loading"><div class="box"></div>載入中</div>
+  </div>
+</div>
+
+<!-- 篝火：取自 output/imagegen/campfire-three-states.svg 的「穩定燃燒」 -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="flame" x1="0" y1="1" x2="0.15" y2="0">
+      <stop stop-color="#FFC65C"/><stop offset=".42" stop-color="#EE8D36"/><stop offset="1" stop-color="#B8552E" stop-opacity=".65"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="1" x2=".1" y2="0">
+      <stop stop-color="#FFF2CB"/><stop offset=".5" stop-color="#F8CF83"/><stop offset="1" stop-color="#EAA35A" stop-opacity=".45"/>
+    </linearGradient>
+    <linearGradient id="charcoal" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#66503C"/><stop offset=".4" stop-color="#3C362C"/><stop offset="1" stop-color="#252923"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop stop-color="#E5A352" stop-opacity=".25"/><stop offset=".5" stop-color="#C88D4B" stop-opacity=".1"/><stop offset="1" stop-color="#A59068" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="fire-softness" x="-50%" y="-30%" width="200%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="7"/><feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge><feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+  </defs>
+</svg>
+<template id="campfire">
+  <svg class="campfire" viewBox="0 0 256 256" aria-hidden="true">
+    <ellipse cx="128" cy="153" rx="112" ry="100" fill="url(#halo)"/>
+    <g class="lit">
+      <path class="flame" fill="url(#flame)" filter="url(#fire-softness)" d="M128 188C88 170 75 145 84 117c6-19 22-32 31-48 9-16 12-33 6-48 35 25 47 58 38 91 9-6 16-16 20-25 17 27 21 48 9 67-12 18-35 27-60 34Z"/>
+      <path class="core" fill="url(#core)" filter="url(#fire-softness)" d="M128 188c-28-13-37-29-30-47 5-15 22-26 29-40 5-9 7-17 6-25 23 22 22 44 17 60 7-4 12-9 15-15 13 28-6 52-37 67Z"/>
+    </g>
+    <g fill="url(#charcoal)"><path d="M66 171 193 223 184 242 57 190Z"/><path d="m57 223 127-52 9 19-127 52Z"/></g>
+  </svg>
+</template>
+
+<script>
+  const R = (a, b) => a + Math.random() * (b - a);
+
+  function sparks(n, big) {
+    let html = '<div class="ember"></div>';
+    for (let i = 0; i < n; i++) {
+      const s = big ? R(2, 4.5) : R(1.5, 2.5);
+      html += `<span class="spark" style="--s:${s}px;--dx:${R(-1, 1) * (big ? 40 : 8)}px;--h:${big ? -R(220, 340) : -R(26, 38)}px;--d:${R(2.2, 4)}s;--delay:${R(0, 3.5)}s;--y0:${big ? 150 : 6}px;margin-left:-${s / 2}px"></span>`;
+    }
+    return html;
+  }
+
+  const roads = `
+    <svg class="roads" viewBox="0 0 300 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path pathLength="1" stroke-width="5" style="--delay:0s" d="M150 260 L150 0"/>
+      <path pathLength="1" stroke-width="5" style="--delay:0s" d="M150 260 L150 520"/>
+      <path pathLength="1" stroke-width="4" style="--delay:.2s" d="M150 250 C200 248 250 244 300 240"/>
+      <path pathLength="1" stroke-width="4" style="--delay:.2s" d="M150 250 C100 252 50 255 0 258"/>
+      <path pathLength="1" stroke-width="3" style="--delay:.5s" d="M150 120 C200 118 250 116 300 112"/>
+      <path pathLength="1" stroke-width="3" style="--delay:.6s" d="M150 380 C100 382 50 386 0 390"/>
+      <path pathLength="1" stroke-width="3" style="--delay:.7s;--d:1s" d="M230 246 C232 180 236 120 240 0"/>
+      <path pathLength="1" stroke-width="3" style="--delay:.8s;--d:1s" d="M70 255 C68 330 66 420 64 520"/>
+      <path pathLength="1" stroke-width="2" style="--delay:1s;--d:.8s" d="M150 380 C200 378 250 372 300 366"/>
+      <path pathLength="1" stroke-width="2" style="--delay:1.1s;--d:.8s" d="M150 120 C100 122 50 126 0 130"/>
+      <circle cx="150" cy="250" r="6"/>
+    </svg>`;
+  const roadLoading = `<svg class="roads" viewBox="0 0 40 40" aria-hidden="true"><path pathLength="1" stroke-width="3" d="M4 26 C14 24 24 20 36 12"/></svg>`;
+
+  function render(col) {
+    const kind = col.dataset.kind, phone = col.querySelector('.phone'), box = col.querySelector('.box');
+    const fire = () => document.getElementById('campfire').content.cloneNode(true);
+    phone.innerHTML = '';
+    box.innerHTML = '';
+    if (kind === 'a') { phone.innerHTML = sparks(26, true); box.innerHTML = sparks(4, false); }
+    if (kind === 'b') { phone.append(fire()); box.append(fire()); }
+    if (kind === 'c') { phone.innerHTML = roads; box.innerHTML = roadLoading; }
+    phone.insertAdjacentHTML('beforeend', '<div class="brand">anaba</div>');
+  }
+
+  document.querySelectorAll('.col').forEach(render);
+  document.addEventListener('click', e => {
+    const b = e.target.closest('.replay');
+    if (b) render(b.closest('.col'));
+  });
+</script>
+</body>
+</html>
