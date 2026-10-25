@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>新增到訪試做</title>
+<style>
+  :root {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --bg: #121110;
+    --line: #2c2926;
+    --text: #efe4d6;
+    --muted: #a69a8c;
+    --faint: #6f665d;
+    --fire: #e07a2e;
+    --error: #e5674f;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #1a1816; color: var(--text); font-family: system-ui, sans-serif; padding: 24px 16px 48px; }
+  h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .lead { font-size: 13px; color: #9a9086; margin-bottom: 24px; }
+  .row { display: flex; flex-wrap: wrap; gap: 28px; justify-content: center; }
+  figure { width: 360px; max-width: 100%; }
+  figcaption { font-size: 14px; margin: 12px 2px 0; }
+  figcaption small { display: block; color: #9a9086; font-size: 12px; margin-top: 2px; }
+
+  .phone { position: relative; height: 720px; border: 1px solid #333; overflow: hidden; display: flex; flex-direction: column;
+    background: var(--noise), var(--bg); background-blend-mode: soft-light, normal; }
+  .scroll { flex: 1; overflow-y: auto; padding: 0 18px 24px; scrollbar-width: thin; scrollbar-color: #3a3530 transparent; }
+
+  header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  header button { background: none; border: 0; color: var(--muted); font-size: 22px; width: 32px; height: 32px; cursor: pointer; }
+  header .t small { display: block; font-size: 12px; color: var(--muted); }
+  header .t b { font-size: 18px; letter-spacing: .02em; }
+
+  section { padding-top: 22px; }
+  .label { display: flex; align-items: baseline; gap: 8px; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .label .req { color: var(--fire); font-size: 12px; }
+  .label .hint { margin-left: auto; font-size: 12px; color: var(--faint); }
+  .group { padding-top: 26px; margin-top: 26px; border-top: 1px solid var(--line); }
+  .group > .label { color: var(--text); font-size: 15px; }
+
+  /* 評價：大的直排選項 */
+  .rating { display: grid; gap: 8px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt { min-height: 44px; padding: 10px 14px; font: inherit; font-size: 15px; color: var(--text); text-align: left;
+    background: transparent; border: 1px solid var(--line); cursor: pointer; }
+  .rating .opt { min-height: 52px; font-size: 16px; display: flex; align-items: center; gap: 12px; }
+  .rating .opt i { font-style: normal; color: var(--faint); font-family: ui-monospace, monospace; font-size: 13px; letter-spacing: .1em; }
+  .price .opt { font-family: ui-monospace, monospace; letter-spacing: .08em; }
+
+  textarea { width: 100%; min-height: 64px; resize: none; padding: 12px; font: inherit; font-size: 16px; color: var(--text);
+    background: rgba(0, 0, 0, .35); border: 1px solid var(--line); }
+  textarea:focus, .opt:focus-visible, .submit:focus-visible { outline: 2px solid var(--fire); outline-offset: 2px; }
+  .count { text-align: right; font-size: 12px; color: var(--faint); margin-top: 4px; }
+  .count.over { color: var(--error); }
+
+  .info { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--faint); background: none; color: var(--muted);
+    font-size: 12px; line-height: 1; cursor: pointer; }
+  .tiers { display: none; font-size: 12px; color: var(--muted); line-height: 1.8; margin: -2px 0 10px; font-family: ui-monospace, monospace; }
+  .tiers.show { display: block; }
+
+  footer { padding: 12px 18px 16px; border-top: 1px solid var(--line); background: var(--bg); }
+  .err { min-height: 18px; font-size: 13px; color: var(--error); margin-bottom: 6px; }
+  .submit { width: 100%; min-height: 52px; font: inherit; font-size: 16px; letter-spacing: .1em; cursor: pointer; }
+
+  /* A：描邊 */
+  .a .opt[aria-pressed="true"] { border-color: var(--fire); color: var(--fire); }
+  .a .rating .opt[aria-pressed="true"] i { color: var(--fire); }
+  .a .submit { background: transparent; color: var(--fire); border: 1px solid var(--fire); }
+
+  /* B：實心 */
+  .b .opt[aria-pressed="true"] { background: var(--fire); border-color: var(--fire); color: #1a120b; font-weight: 600; }
+  .b .rating .opt[aria-pressed="true"] i { color: #1a120b; }
+  .b .submit { background: var(--fire); color: #1a120b; border: 0; font-weight: 700; }
+</style>
+</head>
+<body>
+<h1>新增到訪試做</h1>
+<p class="lead">以預覽卡第 3 張（純黑與橘、霧面）為基準。左右只差「選中」與「送出」的表現；可以實際點選、打字、按送出。</p>
+
+<div class="row">
+  <figure>
+    <div class="phone a"></div>
+    <figcaption>A. 描邊<small>選中＝橘框橘字；送出按鈕也是描邊。安靜，但選中與未選差異較小</small></figcaption>
+  </figure>
+  <figure>
+    <div class="phone b"></div>
+    <figcaption>B. 實心<small>選中＝橘底深字；送出按鈕實心。一眼看出選了什麼，但畫面上的橘色變多</small></figcaption>
+  </figure>
+</div>
+
+<template id="form">
+  <header>
+    <button aria-label="返回">‹</button>
+    <div class="t"><small>新增到訪</small><b>阿明麵館</b></div>
+  </header>
+  <div class="scroll">
+    <section>
+      <div class="label">評價 <span class="req">必填</span></div>
+      <div class="rating single" data-name="rating">
+        <button class="opt" aria-pressed="false"><i>III</i>我會推薦人來</button>
+        <button class="opt" aria-pressed="false"><i>II</i>我會再來</button>
+        <button class="opt" aria-pressed="false"><i>I</i>可以再給次機會</button>
+      </div>
+    </section>
+    <section>
+      <div class="label">筆記 <span class="hint">只有自己看得到</span></div>
+      <textarea placeholder="例如：乾麵必點、不要加辣"></textarea>
+      <div class="count">0 / 20</div>
+    </section>
+
+    <div class="group">
+      <div class="label">補充資訊 <span class="hint">選填，沒填就是不清楚</span></div>
+      <section>
+        <div class="label">店家種類 <span class="hint">可複選</span></div>
+        <div class="chips">
+          <button class="opt" aria-pressed="false">餐廳</button><button class="opt" aria-pressed="false">小吃</button>
+          <button class="opt" aria-pressed="false">咖啡廳</button><button class="opt" aria-pressed="false">甜點店</button>
+          <button class="opt" aria-pressed="false">酒吧</button><button class="opt" aria-pressed="false">其他</button>
+        </div>
+      </section>
+      <section>
+        <div class="label">價位 <button class="info" aria-label="價位級距說明">?</button><span class="hint">每人，新台幣</span></div>
+        <div class="tiers">$ 150 以下　$$ 150–500　$$$ 500–1000<br>$$$$ 1000–2000　$$$$$ 2000 以上</div>
+        <div class="chips price single">
+          <button class="opt" aria-pressed="false">$</button><button class="opt" aria-pressed="false">$$</button>
+          <button class="opt" aria-pressed="false">$$$</button><button class="opt" aria-pressed="false">$$$$</button>
+          <button class="opt" aria-pressed="false">$$$$$</button>
+        </div>
+      </section>
+      <section>
+        <div class="label">寵物</div>
+        <div class="chips single">
+          <button class="opt" aria-pressed="false">可帶</button><button class="opt" aria-pressed="false">有條件可帶</button>
+          <button class="opt" aria-pressed="false">不可帶</button>
+        </div>
+      </section>
+      <section>
+        <div class="label">付款方式 <span class="hint">可複選</span></div>
+        <div class="chips">
+          <button class="opt" aria-pressed="false">現金</button><button class="opt" aria-pressed="false">信用卡</button>
+          <button class="opt" aria-pressed="false">行動支付</button><button class="opt" aria-pressed="false">其他</button>
+        </div>
+      </section>
+    </div>
+  </div>
+  <footer>
+    <div class="err" role="alert"></div>
+    <button class="submit">記下這次到訪</button>
+  </footer>
+</template>
+
+<script>
+  const tpl = document.getElementById('form');
+  for (const phone of document.querySelectorAll('.phone')) {
+    phone.append(tpl.content.cloneNode(true));
+    const err = phone.querySelector('.err');
+
+    phone.addEventListener('click', e => {
+      const opt = e.target.closest('.opt');
+      if (opt) {
+        const on = opt.getAttribute('aria-pressed') !== 'true';
+        // 單選可再點一下取消（評價除外）
+        if (opt.parentElement.classList.contains('single')) {
+          if (!on && opt.parentElement.dataset.name === 'rating') return;
+          opt.parentElement.querySelectorAll('.opt').forEach(o => o.setAttribute('aria-pressed', 'false'));
+        }
+        opt.setAttribute('aria-pressed', String(on));
+        err.textContent = '';
+      }
+      if (e.target.closest('.info')) phone.querySelector('.tiers').classList.toggle('show');
+      if (e.target.closest('.submit')) {
+        const rated = phone.querySelector('[data-name="rating"] [aria-pressed="true"]');
+        const len = [...phone.querySelector('textarea').value].length;
+        err.textContent = !rated ? '請選擇評價' : len > 20 ? '筆記最多 20 字' : '';
+        if (!err.textContent) e.target.textContent = '已記下（試做）';
+      }
+    });
+
+    const ta = phone.querySelector('textarea'), count = phone.querySelector('.count');
+    ta.addEventListener('input', () => {
+      const len = [...ta.value].length;
+      count.textContent = `${len} / 20`;
+      count.classList.toggle('over', len > 20);
+    });
+  }
+
+  // 截圖用：右邊先選幾個，看選中的樣子
+  if (location.hash === '#demo') {
+    for (const p of document.querySelectorAll('.phone')) {
+      const pick = sel => p.querySelector(sel).setAttribute('aria-pressed', 'true');
+      pick('.rating .opt:nth-child(2)'); pick('.chips .opt:nth-child(2)'); pick('.price .opt:nth-child(2)');
+      p.querySelector('textarea').value = '乾麵必點'; p.querySelector('.count').textContent = '4 / 20';
+    }
+  }
+</script>
+</body>
+</html>

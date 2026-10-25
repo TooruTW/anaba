@@ -39,10 +39,10 @@
 | 3. 找出主要功能 | 完成 | MVP 情境 0～5；時間不限，費用以免費方案為原則（目前全部免費：Supabase、Vercel Hobby、R2；網域與寄信等正式開放再說） |
 | 4. 技術可行性評估 | 完成 | 自訂地圖（MapLibre＋Protomaps/OSM）已驗證可行，見 custom-map-prototype.md；店家位置由使用者在地圖上點大概位置，不用任何地址轉座標服務；精確位置與導航透過使用者貼的 Google Maps 連結；技術選型已定，見 tech/stack.md；R2 經網路調查可行（建帳號時再確認）；Google 短網址展開已實測可行，見 google-short-url-test.md |
 | 5. 詳細需求 | 完成 | 情境 0～6、亮度計分公式與驗收條件（mvp-acceptance.md）已定案；架構改為自建後端 API 與登入（ADR 0002）；系統方核對只做管理 API，不做介面 |
-| 6. 最小設計與開發清單 | 進行中 | 資料模型完成，見 tech/data-model.md；API 設計完成，見 tech/api.md 與 admin-api.md |
+| 6. 最小設計與開發清單 | 進行中 | 資料模型完成，見 tech/data-model.md；API 設計完成，見 tech/api.md 與 admin-api.md；design system 初版完成，見 tech/design-system.md |
 | 7～9 | 未開始 | |
 
-下一步：第 6 階段的 design system（先定畫面風格方向），再來是畫面草圖與開發清單。畫面風格必須是自己的，不可照搬 AI 提案或預設樣式，規則見 tech/stack.md「畫面風格」。
+下一步：第 6 階段的招牌時刻設計（開啟畫面、載入、篝火、送出動畫、空狀態），再來是畫面草圖與開發清單。畫面風格必須是自己的，不可照搬 AI 提案或預設樣式，規則見 tech/stack.md「畫面風格」。
 
 ## 文件安排
 
@@ -59,6 +59,7 @@
 - [tech/data-model.md](tech/data-model.md)：資料表、欄位規則與推算方式。
 - [tech/api.md](tech/api.md)：前端用的 API 端點、欄位驗證與錯誤格式。
 - [admin-api.md](admin-api.md)：系統方核對店家的管理 API 使用說明。
+- [tech/design-system.md](tech/design-system.md)：顏色、字體、間距與元件規則；試做頁在 `output/prototypes/`。
 - [adr/](adr/)：難以反悔的架構決策紀錄。
 
 進入詳細需求階段，再按需要新增需求、設計及驗收紀錄，不先建立空文件。

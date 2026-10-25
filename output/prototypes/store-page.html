@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>店家頁試做</title>
+<style>
+  :root {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #1a1816; color: #d8cfc2; font-family: system-ui, sans-serif; padding: 24px 16px 48px; }
+  h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+  .lead { font-size: 13px; color: #9a9086; margin-bottom: 24px; }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+  figure { width: 330px; max-width: 100%; }
+  figcaption { font-size: 14px; margin: 12px 2px 0; }
+  figcaption small { display: block; color: #9a9086; font-size: 12px; margin-top: 2px; }
+
+  /* 色系 */
+  .live   { --bg: #121110; --line: #2c2926; --text: #efe4d6; --muted: #a69a8c; --faint: #6f665d; --accent: #e07a2e; --main: #e07a2e; --on-main: #1a120b; }
+  .cold   { --bg: #111213; --line: #27292b; --text: #c9cbcd; --muted: #8b8f93; --faint: #5d6165; --accent: #b4b8bc; --main: #e07a2e; --on-main: #1a120b; }
+  .ember  { --bg: #140f0c; --line: #2e2520; --text: #d6c6b6; --muted: #9c8676; --faint: #6b5649; --accent: #a5532f; --main: #a5532f; --on-main: #f1e2d2; }
+  .pale   { --bg: #3a3835; --line: #55524e; --text: #efede9; --muted: #bab6af; --faint: #8f8a83; --accent: #efede9; --main: #e07a2e; --on-main: #1a120b; }
+
+  .phone { height: 680px; border: 1px solid #333; overflow-y: auto; color: var(--text);
+    background: var(--noise), var(--bg); background-blend-mode: soft-light, normal;
+    scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+
+  header { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  header button { background: none; border: 0; color: var(--muted); font-size: 22px; width: 28px; height: 32px; }
+  header small { font-size: 12px; color: var(--muted); letter-spacing: .1em; }
+  main { padding: 20px 18px 28px; }
+
+  .name { display: flex; align-items: baseline; gap: 10px; font-size: 24px; font-weight: 700; letter-spacing: .02em; }
+  .tag { font-size: 11px; font-weight: 400; color: var(--muted); border: 1px solid var(--line); padding: 1px 6px; }
+  .sum { display: flex; gap: 18px; margin-top: 14px; font-size: 15px; }
+  .sum i { font-style: normal; font-family: ui-monospace, monospace; color: var(--accent); margin-right: 6px; letter-spacing: .1em; }
+  .sum b { color: var(--accent); font-family: ui-monospace, monospace; font-size: 18px; margin-right: 2px; }
+
+  .extras { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin-top: 20px; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 14px; }
+  .extras dt { color: var(--muted); }
+  .extras dd.no { color: var(--faint); }
+
+  .btn { display: block; width: 100%; min-height: 48px; margin-top: 12px; font: inherit; font-size: 15px; letter-spacing: .06em; cursor: pointer; }
+  .btn.main { background: var(--main); color: var(--on-main); border: 0; font-weight: 700; }
+  .btn.sub { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .acts { margin-top: 20px; }
+
+  h2 { font-size: 13px; font-weight: 400; color: var(--muted); letter-spacing: .1em; margin: 28px 0 4px; }
+  .visit { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .visit .d { font-family: ui-monospace, monospace; color: var(--muted); font-size: 13px; }
+  .visit .r i { font-style: normal; font-family: ui-monospace, monospace; color: var(--accent); margin-right: 6px; letter-spacing: .1em; }
+  .visit .n { grid-column: 1; color: var(--text); }
+  .visit .del { grid-row: 1 / span 2; grid-column: 2; align-self: center; background: none; border: 0; color: var(--faint); font: inherit; font-size: 13px; min-height: 44px; padding: 0 4px; }
+
+  .quiet { display: block; margin: 36px auto 0; background: none; border: 0; color: var(--faint); font: inherit; font-size: 13px; text-decoration: underline; text-underline-offset: 4px; min-height: 44px; }
+</style>
+</head>
+<body>
+<h1>店家頁試做</h1>
+<p class="lead">左邊是一般的店家頁，其餘三支是同一家店成為回憶後的樣子。回憶頁唯讀：沒有新增或刪除到訪，只有「復活」與「永久刪除」。</p>
+
+<div class="row">
+  <figure><div class="phone live" data-mode="live"></div>
+    <figcaption>一般店家頁<small>基準：炭黑霧面＋橘；新增到訪實心、Google 描邊</small></figcaption></figure>
+  <figure><div class="phone cold" data-mode="memory"></div>
+    <figcaption>回憶 1. 冷灰燼<small>火完全熄了：全部褪成冷灰，整頁唯一的橘色是「復活」，像重新點火</small></figcaption></figure>
+  <figure><div class="phone ember" data-mode="memory"></div>
+    <figcaption>回憶 2. 餘燼<small>火還沒全熄：暖褐灰底，橘色降成暗紅餘燼，復活也用同一個暗紅</small></figcaption></figure>
+  <figure><div class="phone pale" data-mode="memory"></div>
+    <figcaption>回憶 3. 淺灰燼<small>冷卻的灰堆：底色反而變淺，和其他頁差異最大；復活維持橘色</small></figcaption></figure>
+</div>
+
+<script>
+  const visits = [
+    ['2026-10-25', 'II', '我會再來', '乾麵必點'],
+    ['2026-10-02', 'III', '我會推薦人來', '滷味也好吃'],
+    ['2026-09-14', 'I', '可以再給次機會', ''],
+  ];
+  for (const p of document.querySelectorAll('.phone')) {
+    const live = p.dataset.mode === 'live';
+    p.innerHTML = `
+      <header><button aria-label="返回">‹</button><small>${live ? '我的私房店' : '回憶'}</small></header>
+      <main>
+        <div class="name">阿明麵館 <span class="tag">未核對</span></div>
+        <div class="sum"><span><i>II</i>我會再來</span><span>來訪 <b>3</b> 天</span></div>
+        <dl class="extras">
+          <dt>種類</dt><dd>小吃</dd>
+          <dt>價位</dt><dd>$$　150–500</dd>
+          <dt>寵物</dt><dd class="no">不清楚</dd>
+          <dt>付款</dt><dd>現金</dd>
+        </dl>
+        <div class="acts">
+          ${live ? '<button class="btn main">新增到訪</button>' : '<button class="btn main">復活</button>'}
+          <button class="btn sub">在 Google 地圖開啟</button>
+        </div>
+        <h2>到訪</h2>
+        ${visits.map(([d, m, r, n]) => `
+          <div class="visit">
+            <span><span class="d">${d}</span>　<span class="r"><i>${m}</i>${r}</span></span>
+            ${n ? `<span class="n">${n}</span>` : ''}
+            ${live ? '<button class="del">刪除</button>' : ''}
+          </div>`).join('')}
+        <button class="quiet">${live ? '成為回憶' : '永久刪除'}</button>
+      </main>`;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>元件總覽</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  /* token：與 DOC/tech/design-system.md 一致 */
+  :root {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --sans: "Noto Sans TC", system-ui, sans-serif;
+    --mono: ui-monospace, monospace;
+    --radius: 4px;
+  }
+  .live { --bg: #121110; --line: #2c2926; --text: #efe4d6; --muted: #a69a8c; --faint: #8a7f74; --accent: #e07a2e; --fire: #e07a2e; --on-fire: #1a120b; --error: #e5674f; }
+  .memory { --bg: #3a3835; --line: #55524e; --text: #efede9; --muted: #bab6af; --faint: #aaa59d; --accent: #efede9; --fire: #e07a2e; --on-fire: #1a120b; --error: #ff8a73; }
+
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #1a1816; color: #d8cfc2; font-family: var(--sans); padding: 24px 16px 48px; }
+  h1 { font-size: 18px; margin-bottom: 4px; }
+  .lead { font-size: 14px; color: #9a9086; margin-bottom: 24px; }
+  .cols { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+
+  .sheet { width: 400px; max-width: 100%; padding: 8px 20px 36px; color: var(--text); background: var(--noise), var(--bg); background-blend-mode: soft-light, normal; }
+  .btn, .opt, textarea, .tag, .card, .dialog, .toast, .sw span, .card .open { border-radius: var(--radius); }
+  .card { overflow: hidden; }
+  .radius { margin-bottom: 20px; font-size: 14px; display: flex; gap: 8px; align-items: center; }
+  .radius button { min-width: 48px; min-height: 36px; background: none; border: 1px solid #444; color: #d8cfc2; font: inherit; cursor: pointer; }
+  .radius button[aria-pressed="true"] { background: #e07a2e; border-color: #e07a2e; color: #1a120b; font-weight: 700; }
+  .sheet > h2 { font-size: 18px; padding: 16px 0 4px; }
+  h3 { font-size: 14px; font-weight: 400; color: var(--muted); letter-spacing: .1em; margin: 28px 0 12px; }
+
+  .swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .sw { font-size: 12px; color: var(--muted); }
+  .sw span { display: block; height: 36px; border: 1px solid var(--line); margin-bottom: 4px; }
+
+  .type div { display: flex; align-items: baseline; gap: 12px; padding: 4px 0; }
+  .type small { width: 72px; font-size: 12px; color: var(--faint); font-family: var(--mono); }
+
+  /* 按鈕 */
+  .btn { display: block; width: 100%; min-height: 48px; margin-top: 8px; font: inherit; font-size: 16px; letter-spacing: .06em; cursor: pointer; }
+  .btn.main { background: var(--fire); color: var(--on-fire); border: 0; font-weight: 700; }
+  .btn.sub { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .quiet { background: none; border: 0; color: var(--faint); font: inherit; font-size: 14px; text-decoration: underline; text-underline-offset: 4px; min-height: 44px; padding: 0 4px; cursor: pointer; }
+  .row { display: flex; gap: 16px; align-items: center; }
+  button:focus-visible, textarea:focus, .opt:focus-visible { outline: 2px solid var(--fire); outline-offset: 2px; }
+
+  /* 選項 */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .opt { min-height: 44px; padding: 10px 14px; font: inherit; font-size: 16px; color: var(--text); background: transparent; border: 1px solid var(--line); cursor: pointer; text-align: left; }
+  .opt[aria-pressed="true"] { background: var(--fire); border-color: var(--fire); color: var(--on-fire); font-weight: 700; }
+  .opt i { font-style: normal; font-family: var(--mono); font-size: 14px; letter-spacing: .1em; color: var(--faint); margin-right: 12px; }
+  .opt[aria-pressed="true"] i { color: var(--on-fire); }
+  .rating { display: grid; gap: 8px; }
+  .rating .opt { min-height: 52px; font-size: 16px; }
+  .mono { font-family: var(--mono); letter-spacing: .08em; }
+
+  /* 輸入 */
+  textarea { width: 100%; min-height: 64px; resize: none; padding: 12px; font: inherit; font-size: 16px; color: var(--text); background: rgba(0, 0, 0, .35); border: 1px solid var(--line); }
+  .count { text-align: right; font-size: 12px; color: var(--faint); margin-top: 4px; }
+  .count.over { color: var(--error); }
+  .err { font-size: 14px; color: var(--error); margin-top: 8px; }
+
+  .tag { font-size: 12px; color: var(--muted); border: 1px solid var(--line); padding: 1px 6px; }
+
+  /* 清單列 */
+  .li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 16px; }
+  .li .d { font-family: var(--mono); font-size: 14px; color: var(--muted); }
+  .li .r { font-family: var(--mono); color: var(--accent); letter-spacing: .1em; }
+  .li .end { margin-left: auto; }
+  .li .sub2 { font-size: 14px; color: var(--muted); }
+
+  /* 預覽卡、確認框、提示 */
+  .card { padding: 18px 18px 16px; border-top: 2px solid var(--fire); background: var(--bg); position: relative; outline: 1px solid var(--line); }
+  .card .name { font-size: 22px; font-weight: 700; }
+  .card .price { margin-top: 8px; font-size: 14px; color: var(--muted); }
+  .card .price b { color: var(--accent); font-family: var(--mono); margin-right: 8px; letter-spacing: .1em; }
+  .card .open { display: inline-block; margin-top: 14px; padding: 9px 14px; color: var(--accent); font-size: 14px; border: 1px solid var(--accent); }
+  .card .more { position: absolute; right: 16px; bottom: 18px; font-size: 14px; color: var(--faint); }
+
+  .dialog { border: 1px solid var(--line); padding: 20px; background: var(--bg); }
+  .dialog p { font-size: 16px; line-height: 1.6; }
+  .dialog .row { margin-top: 16px; }
+  .dialog .btn { margin-top: 0; }
+
+  .toast { display: inline-block; border: 1px solid var(--line); padding: 10px 16px; font-size: 14px; background: var(--bg); }
+</style>
+</head>
+<body>
+<h1>元件總覽</h1>
+<p class="lead">左：一般色系；右：回憶色系（淺灰燼）。規格見 DOC/tech/design-system.md。檢查：遮掉 logo，看得出是這個 App 嗎？</p>
+<div class="radius">圓角：
+  <button aria-pressed="false" data-r="0">0</button><button aria-pressed="false" data-r="2">2</button>
+  <button aria-pressed="true" data-r="4">4</button><button aria-pressed="false" data-r="8">8</button>
+</div>
+<div class="cols">
+  <div class="sheet live"><h2>一般</h2></div>
+  <div class="sheet memory"><h2>回憶</h2></div>
+</div>
+
+<template id="parts">
+  <h3>顏色</h3>
+  <div class="swatches">
+    <div class="sw"><span style="background:var(--bg)"></span>bg</div>
+    <div class="sw"><span style="background:var(--line)"></span>line</div>
+    <div class="sw"><span style="background:var(--text)"></span>text</div>
+    <div class="sw"><span style="background:var(--muted)"></span>muted</div>
+    <div class="sw"><span style="background:var(--faint)"></span>faint</div>
+    <div class="sw"><span style="background:var(--accent)"></span>accent</div>
+    <div class="sw"><span style="background:var(--fire)"></span>fire</div>
+    <div class="sw"><span style="background:var(--error)"></span>error</div>
+  </div>
+
+  <h3>字級</h3>
+  <div class="type">
+    <div><small>xl 24</small><b style="font-size:24px">阿明麵館</b></div>
+    <div><small>lg 18</small><span style="font-size:18px">新增到訪</span></div>
+    <div><small>base 16</small><span style="font-size:16px">我會推薦人來</span></div>
+    <div><small>sm 14</small><span style="font-size:14px;color:var(--muted)">2026-10-25</span></div>
+    <div><small>xs 12</small><span style="font-size:12px;color:var(--faint)">選填，沒填就是不清楚</span></div>
+  </div>
+
+  <h3>按鈕</h3>
+  <button class="btn main" data-main></button>
+  <button class="btn sub">在 Google 地圖開啟</button>
+  <div class="row"><button class="quiet" data-quiet></button><button class="quiet">刪除</button></div>
+
+  <h3>選項</h3>
+  <div class="rating">
+    <button class="opt" aria-pressed="false"><i>III</i>我會推薦人來</button>
+    <button class="opt" aria-pressed="true"><i>II</i>我會再來</button>
+    <button class="opt" aria-pressed="false"><i>I</i>可以再給次機會</button>
+  </div>
+  <div class="chips" style="margin-top:12px">
+    <button class="opt" aria-pressed="false">餐廳</button><button class="opt" aria-pressed="true">小吃</button>
+    <button class="opt" aria-pressed="false">咖啡廳</button><button class="opt mono" aria-pressed="true">$$</button>
+  </div>
+
+  <h3>輸入</h3>
+  <textarea>乾麵必點</textarea>
+  <div class="count">4 / 20</div>
+  <textarea style="margin-top:12px">乾麵必點，滷味也很好吃，老闆人很好會多給湯</textarea>
+  <div class="count over">23 / 20</div>
+  <div class="err">筆記最多 20 字</div>
+
+  <h3>標籤與清單列</h3>
+  <span class="tag">未核對</span>
+  <div style="margin-top:8px">
+    <div class="li"><span class="d">2026-10-25</span><span class="r">II</span><span>我會再來</span><button class="quiet end">刪除</button></div>
+    <div class="li"><span>阿明麵館</span><span class="sub2 end">來訪 3 天</span></div>
+  </div>
+
+  <h3>預覽卡</h3>
+  <div class="card">
+    <div class="name">阿明麵館</div>
+    <div class="price"><b>$$</b>每人 150–500</div>
+    <span class="open">在 Google 地圖開啟</span>
+    <span class="more">看更多 →</span>
+  </div>
+
+  <h3>確認框與提示</h3>
+  <div class="dialog">
+    <p data-confirm></p>
+    <div class="row"><button class="btn sub">取消</button><button class="btn main">確定</button></div>
+  </div>
+  <div style="margin-top:12px"><span class="toast">已記下這次到訪</span></div>
+</template>
+
+<script>
+  const tpl = document.getElementById('parts');
+  for (const s of document.querySelectorAll('.sheet')) {
+    s.append(tpl.content.cloneNode(true));
+    const live = s.classList.contains('live');
+    s.querySelector('[data-main]').textContent = live ? '新增到訪' : '復活';
+    s.querySelector('[data-quiet]').textContent = live ? '成為回憶' : '永久刪除';
+    s.querySelector('[data-confirm]').textContent = live
+      ? '這家店會從地圖消失、移到回憶，之後可以復活。'
+      : '永久刪除這家店的全部 3 筆到訪？無法復原。';
+  }
+  document.addEventListener('click', e => {
+    const r = e.target.closest('.radius button');
+    if (r) {
+      document.documentElement.style.setProperty('--radius', r.dataset.r + 'px');
+      document.querySelectorAll('.radius button').forEach(b => b.setAttribute('aria-pressed', String(b === r)));
+    }
+    const o = e.target.closest('.opt');
+    if (o) o.setAttribute('aria-pressed', String(o.getAttribute('aria-pressed') !== 'true'));
+  });
+</script>
+</body>
+</html>
