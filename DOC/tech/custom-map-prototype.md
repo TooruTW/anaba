@@ -117,3 +117,98 @@ const map = new maplibregl.Map({
 - 要不要排除福建沿岸。
 - 縣市或區的名稱、多邊形要用政府開放資料補，還沒有實際下載確認格式和授權。
 - **已決定（2026-10-23）**：Google Maps Platform 條款禁止把 Geocoding 結果用在非 Google 地圖上，因此不用 Google Geocoding。後續再改為不填地址：店家位置由使用者在地圖上點大概位置（`map.on("click")` 取座標），不用任何地址轉座標服務；精確位置與導航由使用者貼的 Google Maps 連結處理。
+
+
+## 地圖氛圍與配色實驗（2026-10-25）
+
+以高雄車站周邊的黑底、橘色道路、白色路名示意圖，試作五種濾鏡。這是靜態圖片上的視覺實驗，尚未整合進 MapLibre；底圖為 AI 示意圖，不能作導航資料。
+
+### 五種氛圍
+
+色碼中的末兩位是 alpha；「識別色」是選項旁的小色點，不是整張地圖的底色。
+
+| 氛圍 | 視覺方向 | 識別色 | 底圖 filter | 染色層（screen 混色） |
+| --- | --- | --- | --- | --- |
+| 01 靜夜 | 低飽和、沉靜灰綠 | `#a0b89e` | `saturate(.38) brightness(.70)` | `#244c48` |
+| 02 晨霧 | 柔和留白、漂浮霧層 | `#c8d9d3` | `saturate(.25) brightness(.65)` | `#405457` |
+| 03 月光 | 冷藍微光、夜間漫遊 | `#9daedb` | `saturate(.15) brightness(.68) hue-rotate(155deg)` | `linear-gradient(135deg,#263b78aa,#192c3b33)` |
+| 04 暖暮 | 琥珀薄霧、溫柔餘暉 | `#d6b388` | `saturate(.55) brightness(.78) sepia(.2)` | `linear-gradient(145deg,#9b67415c,#4a343088)` |
+| 05 探路 | 中央清晰、外圍青灰深霧 | `#8ebfba` | `saturate(.55) brightness(.85)` | `#24434188` |
+
+其他四種氛圍的霧層背景：
+
+```css
+/* 靜夜 */
+background: radial-gradient(ellipse at 30% 30%,#7cae9825,transparent 60%);
+/* 晨霧 */
+background: radial-gradient(ellipse at 22% 40%,#d4e5ddd9,transparent 48%),
+            radial-gradient(ellipse at 85% 70%,#a5bdc5c7,transparent 55%),
+            linear-gradient(125deg,#a3bdc15c,transparent 60%);
+/* 月光 */
+background: radial-gradient(ellipse at 75% 15%,#adbfe399,transparent 50%),
+            radial-gradient(ellipse at 0% 95%,#435e8f88,transparent 50%);
+/* 暖暮 */
+background: radial-gradient(ellipse at 10% 20%,#dec39a88,transparent 55%),
+            radial-gradient(ellipse at 100% 90%,#8b667c66,transparent 60%);
+```
+
+這四種霧層 `inset:-20%`、`filter:blur(25px)`，以 26 秒 `ease-in-out infinite alternate` 在 `translate(-3%,-2%) rotate(-3deg)` 與 `translate(5%,4%) rotate(5deg)` 間流動。一般暗角是 `radial-gradient(ellipse at 50% 46%,transparent 20%,#020c16dc 100%)`；暖暮改為 `radial-gradient(ellipse at 30% 30%,transparent,#1d1119c9)`。
+
+### 探路：固定在正中央揭霧
+
+最後確認的調整：揭霧中心固定在地圖容器的 `50% 50%`。移除滑鼠跟隨、手指拖曳追蹤與 pointer capture，不攔截原生觸控捲動。探路霧層本身沒有漂移動畫。
+
+疊放順序為底圖、染色、霧、暗角；所有覆蓋層使用 `pointer-events:none`。以下是可重建此效果的核心樣式：
+
+```css
+.map {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #000 url('map.png') center / contain no-repeat;
+  --power: .7;
+}
+.map img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: saturate(.55) brightness(.85);
+  opacity: var(--power);
+}
+.layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--power);
+}
+.tint {
+  mix-blend-mode: screen;
+  background: #24434188;
+}
+.fog {
+  filter: none;
+  animation: none;
+  background: radial-gradient(circle at 50% 50%,
+    transparent 5%, #899f9d44 19%, #263c40eb 42%, #13242af5 72%);
+}
+.shade {
+  background: radial-gradient(circle at 50% 50%,
+    transparent 8%, #030b1344 40%, #020a13bb);
+}
+```
+
+底圖同時作為容器背景與上層圖片；強度調整的是上層濾鏡圖片及覆蓋層的 opacity（0–1，預設 0.7），所以強度為 0 時仍看得到原圖。比較原圖時隱藏覆蓋層，並把圖片改為 `filter:none;opacity:1`。其他模式可暫停霧層動畫；減少動態效果偏好下停用動畫與轉場。
+
+### 介面配色
+
+| 用途 | 色碼 |
+| --- | --- |
+| 頁面背景／主文字 | `#111816`／`#e5e8df` |
+| 選項文字／次要文字 | `#c5d0c5`／`#8f9f92` |
+| 選項邊框／hover 背景 | `#2c3b32`／`#1e2b23` |
+| 選中背景／選中邊框 | `#25362b`／`#9eae8c` |
+| 地圖邊框／鍵盤焦點外框 | `#35443b`／`#e7c88d` |
+| 強度滑桿 | `#b3bf9f` |
+
+本節保留效果參數與最後互動決定；實驗頁隨 worktree 清理，不納入正式產品。
