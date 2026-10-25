@@ -29,7 +29,7 @@
 
 ## 開發進度
 
-最後更新：2026-10-24
+最後更新：2026-10-25
 
 | 階段 | 狀態 | 備註 |
 | --- | --- | --- |
@@ -38,9 +38,10 @@
 | 3. 找出主要功能 | 完成 | MVP 情境 0～5；時間不限，費用以免費方案為原則（目前全部免費：Supabase、Vercel Hobby、R2；網域與寄信等正式開放再說） |
 | 4. 技術可行性評估 | 完成 | 自訂地圖（MapLibre＋Protomaps/OSM）已驗證可行，見 custom-map-prototype.md；店家位置由使用者在地圖上點大概位置，不用任何地址轉座標服務；精確位置與導航透過使用者貼的 Google Maps 連結；技術選型已定，見 tech/stack.md；R2 經網路調查可行（建帳號時再確認）；Google 短網址展開已實測可行，見 google-short-url-test.md |
 | 5. 詳細需求 | 完成 | 情境 0～6、亮度計分公式與驗收條件（mvp-acceptance.md）已定案；架構改為自建後端 API 與登入（ADR 0002）；系統方核對只做管理 API，不做介面 |
-| 6～9 | 未開始 | |
+| 6. 最小設計與開發清單 | 進行中 | 資料模型完成，見 tech/data-model.md |
+| 7～9 | 未開始 | |
 
-下一步：第 6 階段，資料模型、API 設計、畫面草圖與開發清單。
+下一步：第 6 階段的 API 設計（含 admin-api.md），再來是 design system、畫面草圖與開發清單。
 
 ## 文件安排
 
@@ -54,6 +55,7 @@
 - [user_stories/mvp-acceptance.md](user_stories/mvp-acceptance.md)：MVP 驗收條件，第 8 階段逐項勾選。
 - [tech/custom-map-prototype.md](tech/custom-map-prototype.md)：自訂台灣地圖技術驗證（用了什麼、來源、注意事項、地圖樣式）。
 - [tech/stack.md](tech/stack.md)：技術選型與開發規則。
+- [tech/data-model.md](tech/data-model.md)：資料表、欄位規則與推算方式。
 - [adr/](adr/)：難以反悔的架構決策紀錄。
 
 進入詳細需求階段，再按需要新增需求、設計及驗收紀錄，不先建立空文件。
