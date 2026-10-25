@@ -1,25 +1,69 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="320" viewBox="0 0 768 256" role="img" aria-labelledby="title desc">
   <title id="title">篝火：微火、穩定燃燒、旺火</title>
-  <desc id="desc">由左至右為三種火焰強度。赭橘色外焰、淺琥珀色內焰與深灰木柴，透明背景。</desc>
+  <desc id="desc">由左至右為三種火焰強度。朦朧的暖橘火光、奶油色焰心、淡淡煙霧與炭褐木柴，透明背景。</desc>
   <defs>
-    <g id="logs" fill="#2D3942">
+    <linearGradient id="flame" x1="0" y1="1" x2="0.15" y2="0">
+      <stop stop-color="#FFC65C"/>
+      <stop offset=".42" stop-color="#EE8D36"/>
+      <stop offset="1" stop-color="#B8552E" stop-opacity=".65"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="1" x2=".1" y2="0">
+      <stop stop-color="#FFF2CB"/>
+      <stop offset=".5" stop-color="#F8CF83"/>
+      <stop offset="1" stop-color="#EAA35A" stop-opacity=".45"/>
+    </linearGradient>
+    <linearGradient id="charcoal" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#66503C"/>
+      <stop offset=".4" stop-color="#3C362C"/>
+      <stop offset="1" stop-color="#252923"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop stop-color="#E5A352" stop-opacity=".25"/>
+      <stop offset=".5" stop-color="#C88D4B" stop-opacity=".1"/>
+      <stop offset="1" stop-color="#A59068" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="smoke" x1="0" y1="1" x2="0" y2="0">
+      <stop stop-color="#B5A48A" stop-opacity="0"/>
+      <stop offset=".5" stop-color="#B5AE98" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#B5AE98" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="fire-softness" x="-50%" y="-30%" width="200%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="7"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <filter id="haze" x="-60%" y="-30%" width="220%" height="160%">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <filter id="log-softness" x="-10%" y="-30%" width="120%" height="160%">
+      <feGaussianBlur stdDeviation=".65"/>
+    </filter>
+    <g id="atmosphere">
+      <ellipse cx="128" cy="153" rx="112" ry="100" fill="url(#halo)"/>
+      <path d="M112 179C76 144 143 129 115 97S147 53 129 14C172 51 125 77 153 110S125 155 146 179Z" fill="url(#smoke)" filter="url(#haze)"/>
+    </g>
+    <g id="logs" fill="url(#charcoal)" filter="url(#log-softness)">
       <path d="M66 171 193 223 184 242 57 190Z"/>
       <path d="m57 223 127-52 9 19-127 52Z"/>
     </g>
   </defs>
   <g id="low" aria-label="微火">
-    <path fill="#C66D36" d="M128 188C103 177 95 160 101 143c3-9 9-16 15-24-1 11 2 15 5 18 12-16 20-33 16-51 28 23 28 46 25 58 5-4 8-10 10-17 13 28 1 48-44 61Z"/>
-    <path fill="#EBA65C" d="M128 188c-17-9-23-21-17-34 3 6 6 10 10 12 3-14 12-20 15-34 15 20 25 38-8 56Z"/>
+    <use href="#atmosphere" opacity=".65"/>
+    <path fill="url(#flame)" filter="url(#fire-softness)" d="M128 188C103 177 95 160 101 143c3-9 9-16 15-24-1 11 2 15 5 18 12-16 20-33 16-51 28 23 28 46 25 58 5-4 8-10 10-17 13 28 1 48-44 61Z"/>
+    <path fill="url(#core)" filter="url(#fire-softness)" d="M128 188c-17-9-23-21-17-34 3 6 6 10 10 12 3-14 12-20 15-34 15 20 25 38-8 56Z"/>
     <use href="#logs"/>
   </g>
   <g id="steady" transform="translate(256)" aria-label="穩定燃燒">
-    <path fill="#C66D36" d="M128 188C88 170 75 145 84 117c6-19 22-32 31-48 9-16 12-33 6-48 35 25 47 58 38 91 9-6 16-16 20-25 17 27 21 48 9 67-12 18-35 27-60 34Z"/>
-    <path fill="#EBA65C" d="M128 188c-28-13-37-29-30-47 5-15 22-26 29-40 5-9 7-17 6-25 23 22 22 44 17 60 7-4 12-9 15-15 13 28-6 52-37 67Z"/>
+    <use href="#atmosphere"/>
+    <path fill="url(#flame)" filter="url(#fire-softness)" d="M128 188C88 170 75 145 84 117c6-19 22-32 31-48 9-16 12-33 6-48 35 25 47 58 38 91 9-6 16-16 20-25 17 27 21 48 9 67-12 18-35 27-60 34Z"/>
+    <path fill="url(#core)" filter="url(#fire-softness)" d="M128 188c-28-13-37-29-30-47 5-15 22-26 29-40 5-9 7-17 6-25 23 22 22 44 17 60 7-4 12-9 15-15 13 28-6 52-37 67Z"/>
     <use href="#logs"/>
   </g>
   <g id="high" transform="translate(512)" aria-label="旺火">
-    <path fill="#C66D36" d="M128 188c-42-14-69-34-66-66 1-14 8-27 18-39-1 17 3 27 10 32-3-26 5-45 20-64 11-15 16-30 12-45 38 27 51 59 45 92 9-6 14-14 16-25 23 28 25 51 13 73-13 23-40 35-68 42Z"/>
-    <path fill="#EBA65C" d="M128 188c-27-10-44-26-37-50 3-9 8-16 13-22 0 11 3 18 7 22-1-21 18-38 23-61 24 23 26 45 20 61 9-4 15-12 18-21 14 34-7 57-44 71Z"/>
+    <use href="#atmosphere" opacity="1"/>
+    <path fill="url(#flame)" filter="url(#fire-softness)" d="M128 188c-42-14-69-34-66-66 1-14 8-27 18-39-1 17 3 27 10 32-3-26 5-45 20-64 11-15 16-30 12-45 38 27 51 59 45 92 9-6 14-14 16-25 23 28 25 51 13 73-13 23-40 35-68 42Z"/>
+    <path fill="url(#core)" filter="url(#fire-softness)" d="M128 188c-27-10-44-26-37-50 3-9 8-16 13-22 0 11 3 18 7 22-1-21 18-38 23-61 24 23 26 45 20 61 9-4 15-12 18-21 14 34-7 57-44 71Z"/>
     <use href="#logs"/>
   </g>
 </svg>
