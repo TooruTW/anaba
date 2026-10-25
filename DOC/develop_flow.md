@@ -41,7 +41,7 @@
 | 6. 最小設計與開發清單 | 進行中 | 資料模型完成，見 tech/data-model.md |
 | 7～9 | 未開始 | |
 
-下一步：第 6 階段的 API 設計（含 admin-api.md），再來是 design system、畫面草圖與開發清單。
+下一步：第 6 階段的 API 設計（含 admin-api.md），再來是 design system、畫面草圖與開發清單。畫面風格必須是自己的，不可照搬 AI 提案或預設樣式，規則見 tech/stack.md「畫面風格」。
 
 ## 文件安排
 
