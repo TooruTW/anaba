@@ -24,6 +24,7 @@
 - 技術評估先回答「做不做得到」，詳細設計再回答「具體怎麼做」。
 - 需求確認後，開發中冒出的新點子先記錄；若確實阻礙核心價值，回到受影響階段修正需求、設計與預估，再繼續開發。
 - 測試與驗收確認「是否符合需求」；試用確認「是否解決了使用者的問題」。
+- 涉及程式邏輯的 code review 盡量執行單元測試、CRAP 與變異測試；範圍與未執行原因必須記錄，見 [測試與 Code Review 建議](tech/stack.md#測試與-code-review-建議)。
 - 不需要每日站會、Sprint 或額外角色分工。完成條件由自己檢查確認。
 - 瀑布式在這裡代表階段依序推進；發現前提錯誤仍應回頭修正。
 
@@ -38,10 +39,10 @@
 | 3. 找出主要功能 | 完成 | MVP 情境 0～5；時間不限，費用以免費方案為原則（目前全部免費：Supabase、Vercel Hobby、R2；網域與寄信等正式開放再說） |
 | 4. 技術可行性評估 | 完成 | 自訂地圖（MapLibre＋Protomaps/OSM）已驗證可行，見 custom-map-prototype.md；店家位置由使用者在地圖上點大概位置，不用任何地址轉座標服務；精確位置與導航透過使用者貼的 Google Maps 連結；技術選型已定，見 tech/stack.md；R2 經網路調查可行（建帳號時再確認）；Google 短網址展開已實測可行，見 google-short-url-test.md |
 | 5. 詳細需求 | 完成 | 情境 0～6、亮度計分公式與驗收條件（mvp-acceptance.md）已定案；架構改為自建後端 API 與登入（ADR 0002）；系統方核對只做管理 API，不做介面 |
-| 6. 最小設計與開發清單 | 進行中 | 資料模型完成，見 tech/data-model.md |
+| 6. 最小設計與開發清單 | 進行中 | 資料模型完成，見 tech/data-model.md；API 設計完成，見 tech/api.md 與 admin-api.md |
 | 7～9 | 未開始 | |
 
-下一步：第 6 階段的 API 設計（含 admin-api.md），再來是 design system、畫面草圖與開發清單。畫面風格必須是自己的，不可照搬 AI 提案或預設樣式，規則見 tech/stack.md「畫面風格」。
+下一步：第 6 階段的 design system（先定畫面風格方向），再來是畫面草圖與開發清單。畫面風格必須是自己的，不可照搬 AI 提案或預設樣式，規則見 tech/stack.md「畫面風格」。
 
 ## 文件安排
 
@@ -56,6 +57,8 @@
 - [tech/custom-map-prototype.md](tech/custom-map-prototype.md)：自訂台灣地圖技術驗證（用了什麼、來源、注意事項、地圖樣式）。
 - [tech/stack.md](tech/stack.md)：技術選型與開發規則。
 - [tech/data-model.md](tech/data-model.md)：資料表、欄位規則與推算方式。
+- [tech/api.md](tech/api.md)：前端用的 API 端點、欄位驗證與錯誤格式。
+- [admin-api.md](admin-api.md)：系統方核對店家的管理 API 使用說明。
 - [adr/](adr/)：難以反悔的架構決策紀錄。
 
 進入詳細需求階段，再按需要新增需求、設計及驗收紀錄，不先建立空文件。
