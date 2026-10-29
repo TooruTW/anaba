@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>登入與註冊草圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --bg: #121110; --line: #2c2926; --text: #efe4d6; --muted: #a69a8c; --faint: #8a7f74; --accent: #e07a2e; --fire: #e07a2e; --on-fire: #1a120b; --error: #e5674f;
+    --sans: "Noto Sans TC", system-ui, sans-serif; --mono: ui-monospace, monospace; --radius: 4px;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #1a1816; color: #d8cfc2; font-family: var(--sans); padding: 24px 16px 48px; }
+  h1 { font-size: 18px; margin-bottom: 4px; }
+  .lead { font-size: 14px; color: #9a9086; margin-bottom: 8px; max-width: 960px; }
+  section > h2 { font-size: 16px; margin: 28px 0 12px; }
+  .cols { display: flex; flex-wrap: wrap; gap: 24px; }
+  .col { width: 664px; max-width: 100%; }
+  .col h3 { font-size: 16px; margin-bottom: 4px; }
+  .col > p { font-size: 14px; color: #9a9086; margin-bottom: 12px; }
+  .pair { display: flex; flex-wrap: wrap; gap: 24px; }
+  .pair > div { width: 320px; max-width: 100%; }
+  .cap { font-size: 12px; color: var(--faint); margin-bottom: 6px; }
+
+  .phone { position: relative; height: 620px; border: 1px solid #333; border-radius: var(--radius); overflow: hidden; color: var(--text);
+    background: var(--noise), var(--bg); background-blend-mode: soft-light, normal; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 8px; padding: 0 8px; height: 56px; border-bottom: 1px solid var(--line); flex: none; }
+  header .back { width: 44px; height: 44px; background: none; border: 0; color: var(--muted); font-size: 22px; }
+  header b { font-size: 18px; }
+  .body { padding: 16px 20px; overflow: hidden; flex: 1; }
+  /* App 名稱只是佔位，標誌之後再定 */
+  .name { font-size: 28px; font-weight: 700; letter-spacing: .12em; padding: 48px 0 32px; }
+  .name.sm { font-size: 20px; padding: 24px 0 16px; }
+
+  label { display: block; font-size: 14px; color: var(--muted); margin: 16px 0 8px; }
+  label:first-child { margin-top: 0; }
+  label small { color: var(--faint); font-size: 12px; margin-left: 8px; }
+  .input { display: flex; align-items: center; min-height: 48px; padding: 12px; font-size: 16px; background: rgba(0, 0, 0, .35); border: 1px solid var(--line); border-radius: var(--radius); }
+  .input.ph { color: var(--faint); }
+  .input.focus { outline: 2px solid var(--fire); outline-offset: 2px; }
+  .input.bad { border-color: var(--error); }
+  .input .show { margin-left: auto; font-size: 14px; color: var(--muted); }
+  .hint { font-size: 12px; color: var(--faint); margin-top: 4px; }
+  .err { font-size: 14px; color: var(--error); margin-top: 6px; }
+  .btn { display: block; width: 100%; min-height: 48px; margin-top: 24px; border-radius: var(--radius); font: inherit; font-size: 16px; letter-spacing: .06em; }
+  .main { background: var(--fire); color: var(--on-fire); border: 0; font-weight: 700; }
+  .link { display: block; min-height: 44px; padding-top: 12px; text-align: center; font-size: 14px; color: var(--accent); }
+  .note { font-size: 12px; color: var(--faint); text-align: center; margin-top: 8px; }
+  .msg { font-size: 14px; color: var(--error); border: 1px solid var(--error); border-radius: var(--radius); padding: 8px 12px; margin-bottom: 16px; }
+
+  .tabs { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
+  .tabs span { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--muted); }
+  .tabs .on { color: var(--text); font-weight: 700; box-shadow: inset 0 -2px var(--fire); }
+</style>
+</head>
+<body>
+<h1>登入與註冊草圖</h1>
+<p class="lead">沒登入時開任何網址都到這裡（沒有介紹頁）。登入：email、密碼。註冊：email、密碼、確認密碼、邀請碼，成功直接進地圖。登入頁要有「忘記密碼請來信〈聯絡信箱〉」。差別在登入和註冊怎麼切換，做三種；錯誤訊息只做一版。頂端「anaba」只是佔位，標誌之後再定。</p>
+
+<section>
+  <h2>1. 登入與註冊怎麼切換（三種）</h2>
+  <div class="cols">
+
+    <div class="col">
+      <h3>A. 兩個頁面</h3>
+      <p>登入頁最下方「有邀請碼？註冊」，進到另一頁註冊，左上角可返回。登入頁最乾淨；大部分時候只會用到登入。</p>
+      <div class="pair">
+        <div><div class="cap">登入頁</div>
+          <div class="phone"><div class="body">
+            <div class="name">anaba</div>
+            <label>Email</label><div class="input ph">you@example.com</div>
+            <label>密碼</label><div class="input ph">至少 8 個字元<span class="show">顯示</span></div>
+            <button class="btn main">登入</button>
+            <p class="note">忘記密碼請來信〈聯絡信箱〉</p>
+            <a class="link" style="margin-top:96px">有邀請碼？註冊</a>
+          </div></div>
+        </div>
+        <div><div class="cap">註冊頁</div>
+          <div class="phone">
+            <header><button class="back" aria-label="返回登入">←</button><b>註冊</b></header>
+            <div class="body">
+              <label>Email</label><div class="input ph">you@example.com</div>
+              <label>密碼<small>至少 8 個字元</small></label><div class="input ph"><span class="show">顯示</span></div>
+              <label>確認密碼</label><div class="input ph"><span class="show">顯示</span></div>
+              <label>邀請碼</label><div class="input ph"></div>
+              <button class="btn main">註冊</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h3>B. 同一頁，上方分頁</h3>
+      <p>名稱下方兩個分頁「登入｜註冊」，切換不換頁。兩件事一眼看得到；但註冊只用一次，卻一直佔著位置。</p>
+      <div class="pair">
+        <div><div class="cap">登入分頁</div>
+          <div class="phone"><div class="body">
+            <div class="name sm">anaba</div>
+            <div class="tabs"><span class="on">登入</span><span>註冊</span></div>
+            <label>Email</label><div class="input ph">you@example.com</div>
+            <label>密碼</label><div class="input ph">至少 8 個字元<span class="show">顯示</span></div>
+            <button class="btn main">登入</button>
+            <p class="note">忘記密碼請來信〈聯絡信箱〉</p>
+          </div></div>
+        </div>
+        <div><div class="cap">註冊分頁</div>
+          <div class="phone"><div class="body">
+            <div class="name sm">anaba</div>
+            <div class="tabs"><span>登入</span><span class="on">註冊</span></div>
+            <label>Email</label><div class="input ph">you@example.com</div>
+            <label>密碼<small>至少 8 個字元</small></label><div class="input ph"><span class="show">顯示</span></div>
+            <label>確認密碼</label><div class="input ph"><span class="show">顯示</span></div>
+            <label>邀請碼</label><div class="input ph"></div>
+            <button class="btn main">註冊</button>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h3>C. 同一張表單，展開註冊欄位</h3>
+      <p>登入表單下方「有邀請碼？註冊」，點了不換頁，原本的 email、密碼留著，下面多出確認密碼與邀請碼，按鈕變成「註冊」。已經打的字不會不見；但同一張表單會變長、變兩種用途。</p>
+      <div class="pair">
+        <div><div class="cap">收合（登入）</div>
+          <div class="phone"><div class="body">
+            <div class="name">anaba</div>
+            <label>Email</label><div class="input">mei@example.com</div>
+            <label>密碼</label><div class="input">••••••••<span class="show">顯示</span></div>
+            <button class="btn main">登入</button>
+            <p class="note">忘記密碼請來信〈聯絡信箱〉</p>
+            <a class="link" style="margin-top:96px">有邀請碼？註冊</a>
+          </div></div>
+        </div>
+        <div><div class="cap">展開（註冊）</div>
+          <div class="phone"><div class="body">
+            <div class="name sm">anaba</div>
+            <label>Email</label><div class="input">mei@example.com</div>
+            <label>密碼<small>至少 8 個字元</small></label><div class="input">••••••••<span class="show">顯示</span></div>
+            <label>確認密碼</label><div class="input focus ph"><span class="show">顯示</span></div>
+            <label>邀請碼</label><div class="input ph"></div>
+            <button class="btn main">註冊</button>
+            <a class="link">已經有帳號？登入</a>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>2. 錯誤訊息（一版）</h2>
+  <div class="cols">
+    <div class="col">
+      <p>登入錯誤不說是哪一欄錯（不透露帳號是否存在），放在表單最上方；註冊錯誤標在出錯的欄位下方。密碼長度和兩次不一致在前端先擋；邀請碼和 email 已註冊等送出後由 API 回傳。</p>
+      <div class="pair">
+        <div><div class="cap">登入失敗</div>
+          <div class="phone"><div class="body">
+            <div class="name sm">anaba</div>
+            <p class="msg" role="alert">email 或密碼錯誤</p>
+            <label>Email</label><div class="input">mei@example.com</div>
+            <label>密碼</label><div class="input focus">••••••••<span class="show">顯示</span></div>
+            <button class="btn main">登入</button>
+            <p class="note">忘記密碼請來信〈聯絡信箱〉</p>
+          </div></div>
+        </div>
+        <div><div class="cap">註冊失敗</div>
+          <div class="phone"><div class="body">
+            <label>Email</label><div class="input">mei@example.com</div>
+            <label>密碼<small>至少 8 個字元</small></label><div class="input">••••••••<span class="show">顯示</span></div>
+            <label>確認密碼</label><div class="input bad">•••••••<span class="show">顯示</span></div>
+            <p class="err">兩次密碼不一致</p>
+            <label>邀請碼</label><div class="input bad">ABCD</div>
+            <p class="err">邀請碼錯誤</p>
+            <button class="btn main">註冊</button>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
