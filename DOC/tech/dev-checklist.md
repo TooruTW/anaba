@@ -8,10 +8,10 @@
 
 | # | 工作 | 內容 | 完成 |
 | --- | --- | --- | --- |
-| 1 | 帳號與環境（手動） | 建 Supabase 專案並開 PostGIS、pg_trgm；建 R2 bucket、上傳台灣 pmtiles、設 CORS；建 Vercel 專案接 git；環境變數：資料庫連線字串、邀請碼、管理 token、聯絡信箱、圖資網址 | 瀏覽器以 Range 讀得到 R2 上的 pmtiles（stack.md「開發前要實測」） |
+| 1 | 帳號與環境（手動） | 建 Supabase 專案（關 Data API、不自動開放新表、開自動 RLS）；建 R2 bucket、上傳台灣 pmtiles、設 CORS；建 Vercel 專案接 git；環境變數：資料庫連線字串、邀請碼、管理 token、聯絡信箱、圖資網址 | 瀏覽器以 Range 讀得到 R2 上的 pmtiles（stack.md「開發前要實測」） |
 | 2 | 專案骨架 | Next.js（App Router）＋ TypeScript ＋ Tailwind、`postgres` 套件、Vitest、Supabase CLI migration；`GET /api/health`；PWA manifest | 推 git 後 Vercel 部署成功，`/api/health` 回 200 |
 | 3 | Design system | 把 design-system.md 寫成 Tailwind theme，字體依字切檔載入；做元件總覽頁（按鈕、選項、評價、輸入框、標籤、清單列、預覽卡、確認框、提示與錯誤訊息） | 元件總覽頁通過「遮掉 logo，看得出是這個 App 嗎？」 |
-| 4 | 資料表 | 依 data-model.md 寫 migration：users、sessions、login_failures、stores、visits、memories；全部開 RLS 不寫政策 | migration 可在空資料庫從頭跑完 |
+| 4 | 資料表 | 依 data-model.md 寫 migration：先 `create extension` PostGIS、pg_trgm，再建 users、sessions、login_failures、stores、visits、memories；全部開 RLS 不寫政策 | migration 可在空資料庫從頭跑完 |
 | 5 | 登入後端 | scrypt 雜湊、資料庫 session（只存 SHA-256、一個月滑動期限）、login_failures 鎖定、非 GET 檢查 `Origin`、未登入導向登入頁的 middleware；註冊、登入、登出、修改密碼四個 API；`npm run reset-password` 腳本 | 情境 00 的 `[自動]` 條件測試通過 |
 | 6 | 登入畫面 | 登入與註冊同一張表單（`login.html` 方案 C）、修改密碼頁、個人選單的登出 | 情境 00 手動條件在手機上通過 |
 | 7 | 資料存取函式與計數 | 到訪與回憶一律經過強制帶入目前使用者的函式；來訪天數（台灣時間）、亮度分數與等級 | 情境 00 的 A／B 權限測試、情境 01 台灣時間、情境 02 計數與亮度的 `[自動]` 條件通過 |
