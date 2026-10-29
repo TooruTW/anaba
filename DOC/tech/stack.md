@@ -98,6 +98,7 @@
 
 ## R2 設定
 
+- 圖資用 `pwsh scripts/fetch-tiles.ps1` 產生（預設抽最新一天的 Protomaps build，可帶日期），輸出 `tiles/taiwan.pmtiles`，再到 R2 後台上傳；`tiles/` 不進 git。
 - 圖資必須是 PMTiles v3 格式（pmtiles JS 4.x 已不支援 v2）。上傳時不要加 `Content-Encoding` metadata，圖磚本身已經壓縮。
 - 重新上傳圖資後 ETag 會改變，pmtiles 函式庫會自動清掉快取並重試，不需要另外處理。
 - CORS（R2 後台 Settings → CORS Policy）。每條規則最多一個萬用字元；Vercel preview 網址每次不同，要用一個萬用字元涵蓋，或逐一列出。改完最多 30 秒生效：
