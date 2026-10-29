@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我的私房店草圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --bg: #121110; --line: #2c2926; --text: #efe4d6; --muted: #a69a8c; --faint: #8a7f74; --accent: #e07a2e; --fire: #e07a2e; --on-fire: #1a120b;
+    --sans: "Noto Sans TC", system-ui, sans-serif; --mono: ui-monospace, monospace; --radius: 4px;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #1a1816; color: #d8cfc2; font-family: var(--sans); padding: 24px 16px 48px; }
+  h1 { font-size: 18px; margin-bottom: 4px; }
+  .lead { font-size: 14px; color: #9a9086; margin-bottom: 8px; max-width: 960px; }
+  section > h2 { font-size: 16px; margin: 28px 0 12px; }
+  .cols { display: flex; flex-wrap: wrap; gap: 24px; }
+  .col { width: 320px; max-width: 100%; }
+  .col h3 { font-size: 16px; margin-bottom: 4px; }
+  .col p { font-size: 14px; color: #9a9086; margin-bottom: 12px; min-height: 88px; }
+
+  .phone { position: relative; height: 620px; border: 1px solid #333; border-radius: var(--radius); overflow: hidden; color: var(--text);
+    background: var(--noise), var(--bg); background-blend-mode: soft-light, normal; display: flex; flex-direction: column; }
+  header { display: flex; align-items: center; gap: 8px; padding: 0 8px; height: 56px; border-bottom: 1px solid var(--line); flex: none; }
+  header .back { width: 44px; height: 44px; background: none; border: 0; color: var(--muted); font-size: 22px; }
+  header b { font-size: 18px; }
+  header .n { margin-left: auto; padding-right: 12px; font-family: var(--mono); font-size: 14px; color: var(--faint); }
+  .body { padding: 16px 20px; overflow: hidden; flex: 1; }
+  .input { min-height: 48px; padding: 12px; font-size: 16px; background: rgba(0, 0, 0, .35); border: 1px solid var(--line); border-radius: var(--radius); }
+  .input.ph { color: var(--faint); }
+  .btn { display: block; width: 100%; min-height: 48px; margin-top: 16px; border-radius: var(--radius); font: inherit; font-size: 16px; letter-spacing: .06em; background: var(--fire); color: var(--on-fire); border: 0; font-weight: 700; }
+  .empty { text-align: center; color: var(--muted); font-size: 14px; padding: 48px 0 0; }
+
+  /* A：純文字列 */
+  .li { display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid var(--line); }
+  .li .nm { font-size: 16px; }
+  .li .d { margin-left: auto; font-family: var(--mono); font-size: 14px; color: var(--muted); }
+
+  /* B：篝火列 */
+  .fl { display: flex; align-items: center; gap: 12px; min-height: 64px; border-bottom: 1px solid var(--line); }
+  .fire { flex: none; width: 36px; height: 36px; background: url("../imagegen/campfire-three-states.svg") 0 50% / 300% 100% no-repeat; }
+  .fire.l2 { background-position-x: 50%; }
+  .fire.l3 { background-position-x: 100%; }
+  .fl .nm { font-size: 16px; }
+  .fl small { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .fl small b { font-family: var(--mono); font-weight: 400; color: var(--accent); }
+
+  /* C：依月份分段 */
+  .mon { font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: .1em; margin: 16px 0 0; padding-bottom: 6px; border-bottom: 1px solid var(--fire); }
+  .mon:first-of-type { margin-top: 12px; }
+  .ml { display: flex; align-items: center; min-height: 48px; border-bottom: 1px solid var(--line); font-size: 16px; }
+  .ml .p { margin-left: auto; font-family: var(--mono); font-size: 14px; color: var(--accent); }
+</style>
+</head>
+<body>
+<h1>我的私房店草圖</h1>
+<p class="lead">從左上角個人選單進來。列出所有非回憶的私房店，依最近一次到訪排序（新的在上），上方可依店名搜尋；點一列開店家頁。API 每列有店名、亮度、自己最近填的價位（可能沒填）、最近一次到訪時間。差別在每一列放什麼，做三種；空狀態只做一版。</p>
+
+<section>
+  <h2>1. 每一列放什麼（三種）</h2>
+  <div class="cols">
+
+    <div class="col">
+      <h3>A. 店名＋日期</h3>
+      <p>只有店名和最近一次到訪日期，和選店搜尋的清單同一個長相。最好掃讀、一頁放最多；看不出店的亮度。</p>
+      <div class="phone">
+        <header><button class="back" aria-label="返回地圖">←</button><b>我的私房店</b><span class="n">12 家</span></header>
+        <div class="body">
+          <div class="input ph">搜尋店名</div>
+          <div class="li"><span class="nm">阿明麵館</span><span class="d">10/25</span></div>
+          <div class="li"><span class="nm">鹽埕老豆花</span><span class="d">10/21</span></div>
+          <div class="li"><span class="nm">阿美乾麵</span><span class="d">10/14</span></div>
+          <div class="li"><span class="nm">巷口鍋燒意麵</span><span class="d">10/02</span></div>
+          <div class="li"><span class="nm">港邊虱目魚粥</span><span class="d">09/28</span></div>
+          <div class="li"><span class="nm">三角窗冰店</span><span class="d">09/11</span></div>
+          <div class="li"><span class="nm">鴨肉麵線</span><span class="d">08/30</span></div>
+          <div class="li"><span class="nm">麵屋一燈</span><span class="d">08/02</span></div>
+          <div class="li"><span class="nm">老街肉圓</span><span class="d">07/19</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h3>B. 小篝火＋兩行</h3>
+      <p>左邊是地圖上同一個篝火（縮小），第二行是價位與「幾天前」。和地圖連在一起，一眼看出哪家最亮；一頁放得較少。沒填過價位就只顯示日期。</p>
+      <div class="phone">
+        <header><button class="back" aria-label="返回地圖">←</button><b>我的私房店</b><span class="n">12 家</span></header>
+        <div class="body">
+          <div class="input ph">搜尋店名</div>
+          <div class="fl"><span class="fire l3"></span><div><span class="nm">阿明麵館</span><small><b>$$</b>・4 天前</small></div></div>
+          <div class="fl"><span class="fire l2"></span><div><span class="nm">鹽埕老豆花</span><small><b>$</b>・8 天前</small></div></div>
+          <div class="fl"><span class="fire l1"></span><div><span class="nm">阿美乾麵</span><small>15 天前</small></div></div>
+          <div class="fl"><span class="fire l2"></span><div><span class="nm">巷口鍋燒意麵</span><small><b>$</b>・27 天前</small></div></div>
+          <div class="fl"><span class="fire l3"></span><div><span class="nm">港邊虱目魚粥</span><small><b>$$</b>・1 個月前</small></div></div>
+          <div class="fl"><span class="fire l1"></span><div><span class="nm">三角窗冰店</span><small><b>$</b>・1 個月前</small></div></div>
+          <div class="fl"><span class="fire l1"></span><div><span class="nm">鴨肉麵線</span><small>2 個月前</small></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <h3>C. 依月份分段</h3>
+      <p>依最近一次到訪的月份加小標，每列是店名和價位。像翻自己的吃飯紀錄，看得出哪段時間常去哪；搜尋時小標照留。</p>
+      <div class="phone">
+        <header><button class="back" aria-label="返回地圖">←</button><b>我的私房店</b><span class="n">12 家</span></header>
+        <div class="body">
+          <div class="input ph">搜尋店名</div>
+          <div class="mon">2026 / 10</div>
+          <div class="ml">阿明麵館<span class="p">$$</span></div>
+          <div class="ml">鹽埕老豆花<span class="p">$</span></div>
+          <div class="ml">阿美乾麵</div>
+          <div class="ml">巷口鍋燒意麵<span class="p">$</span></div>
+          <div class="mon">2026 / 09</div>
+          <div class="ml">港邊虱目魚粥<span class="p">$$</span></div>
+          <div class="ml">三角窗冰店<span class="p">$</span></div>
+          <div class="mon">2026 / 08</div>
+          <div class="ml">鴨肉麵線</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section>
+  <h2>2. 空狀態（一版）</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>搜尋沒有結果</h3>
+      <p>清單位置顯示一行字，不提供新增（新增店家只從地圖的「＋」進）。</p>
+      <div class="phone">
+        <header><button class="back" aria-label="返回地圖">←</button><b>我的私房店</b><span class="n">12 家</span></header>
+        <div class="body">
+          <div class="input">牛肉</div>
+          <p class="empty" role="status">沒有店名含「牛肉」的私房店</p>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <h3>還沒有私房店</h3>
+      <p>一行字加一個按鈕，按了回地圖並打開選店（同「＋」）。</p>
+      <div class="phone">
+        <header><button class="back" aria-label="返回地圖">←</button><b>我的私房店</b><span class="n">0 家</span></header>
+        <div class="body">
+          <p class="empty">還沒有私房店</p>
+          <button class="btn">記下你的第一家店</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
