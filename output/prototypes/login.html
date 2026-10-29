@@ -50,7 +50,6 @@
   .main { background: var(--fire); color: var(--on-fire); border: 0; font-weight: 700; }
   .link { display: block; min-height: 44px; padding-top: 12px; text-align: center; font-size: 14px; color: var(--accent); }
   .note { font-size: 12px; color: var(--faint); text-align: center; margin-top: 8px; }
-  .msg { font-size: 14px; color: var(--error); border: 1px solid var(--error); border-radius: var(--radius); padding: 8px 12px; margin-bottom: 16px; }
 
   .tabs { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 20px; }
   .tabs span { flex: 1; min-height: 48px; display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--muted); }
@@ -157,14 +156,14 @@
   <h2>2. 錯誤訊息（一版）</h2>
   <div class="cols">
     <div class="col">
-      <p>登入錯誤不說是哪一欄錯（不透露帳號是否存在），放在表單最上方；註冊錯誤標在出錯的欄位下方。密碼長度和兩次不一致在前端先擋；邀請碼和 email 已註冊等送出後由 API 回傳。</p>
+      <p>錯誤一律寫在欄位下方。登入錯誤不說是哪一欄錯（不透露帳號是否存在），寫在密碼欄下方；註冊錯誤寫在出錯的欄位下方。密碼長度和兩次不一致在前端先擋；邀請碼和 email 已註冊等送出後由 API 回傳。</p>
       <div class="pair">
         <div><div class="cap">登入失敗</div>
           <div class="phone"><div class="body">
             <div class="name sm">anaba</div>
-            <p class="msg" role="alert">email 或密碼錯誤</p>
             <label>Email</label><div class="input">mei@example.com</div>
-            <label>密碼</label><div class="input focus">••••••••<span class="show">顯示</span></div>
+            <label>密碼</label><div class="input bad">••••••••<span class="show">顯示</span></div>
+            <p class="err" role="alert">email 或密碼錯誤</p>
             <button class="btn main">登入</button>
             <p class="note">忘記密碼請來信〈聯絡信箱〉</p>
           </div></div>
