@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>地圖主畫面草圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    --bg: #121110; --line: #2c2926; --text: #efe4d6; --muted: #a69a8c; --faint: #8a7f74; --accent: #e07a2e; --fire: #e07a2e; --on-fire: #1a120b;
+    --sans: "Noto Sans TC", system-ui, sans-serif; --mono: ui-monospace, monospace; --radius: 4px;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #1a1816; color: #d8cfc2; font-family: var(--sans); padding: 24px 16px 48px; }
+  h1 { font-size: 18px; margin-bottom: 4px; }
+  .lead { font-size: 14px; color: #9a9086; margin-bottom: 24px; max-width: 960px; }
+  .cols { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+  .col { width: 320px; max-width: 100%; }
+  .col h2 { font-size: 16px; margin-bottom: 4px; }
+  .col p { font-size: 14px; color: #9a9086; margin-bottom: 12px; min-height: 108px; }
+
+  .phone { position: relative; height: 620px; border: 1px solid #333; border-radius: var(--radius); overflow: hidden; color: var(--text);
+    background: #000 url("../../DOC/asset/draft_images/map.png") center / 700px; }
+  .phone::before { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, .35); }
+
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--fire); outline-offset: 2px; }
+  .ui { position: absolute; z-index: 2; }
+  .solid { background: var(--noise), var(--bg); background-blend-mode: soft-light, normal; border: 1px solid var(--line); border-radius: var(--radius); }
+  .icon { width: 44px; height: 44px; display: grid; place-items: center; }
+  .icon svg { width: 20px; height: 20px; stroke: var(--text); fill: none; stroke-width: 1.6; stroke-linecap: round; }
+  .main { background: var(--fire); color: var(--on-fire); border: 0; border-radius: var(--radius); font-weight: 700; font-size: 16px; letter-spacing: .06em; }
+
+  /* 預覽卡 */
+  .card { left: 12px; right: 12px; padding: 18px 18px 16px; border-top: 2px solid var(--fire); display: none; }
+  .phone.open .card { display: block; }
+  .card .name { font-size: 22px; font-weight: 700; }
+  .card .price { margin-top: 8px; font-size: 14px; color: var(--muted); }
+  .card .price b { color: var(--accent); font-family: var(--mono); margin-right: 8px; letter-spacing: .1em; }
+  .card .open { display: inline-block; margin-top: 14px; padding: 9px 14px; color: var(--accent); font-size: 14px; border: 1px solid var(--accent); border-radius: var(--radius); }
+  .card .more { position: absolute; right: 16px; bottom: 18px; font-size: 14px; color: var(--faint); }
+
+  /* 個人選單 */
+  .menu { display: none; padding: 8px 0; min-width: 180px; }
+  .phone.menu-open .menu { display: block; }
+  .menu button { display: block; width: 100%; min-height: 44px; padding: 0 16px; text-align: left; background: none; border: 0; font-size: 16px; }
+  .menu hr { border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
+  .menu .q { color: var(--faint); font-size: 14px; }
+
+  .toast { left: 50%; bottom: 96px; transform: translateX(-50%); padding: 10px 16px; font-size: 14px; white-space: nowrap; display: none; }
+  .phone.toasting .toast { display: block; }
+
+  /* A：底部長按鈕 */
+  .A .add { left: 12px; right: 12px; bottom: 16px; height: 48px; }
+  .A .menu-btn { top: 12px; right: 12px; }
+  .A .menu { top: 64px; right: 12px; }
+  .A .loc { right: 12px; bottom: 76px; }
+  .A .card { bottom: 16px; }
+  .A.open .add, .A.open .loc { display: none; }
+
+  /* B：角落按鈕 */
+  .B .add { right: 16px; bottom: 20px; width: 56px; height: 56px; font-size: 28px; font-weight: 400; }
+  .B .menu-btn { top: 12px; left: 12px; }
+  .B .menu { top: 64px; left: 12px; }
+  .B .loc { right: 22px; bottom: 88px; }
+  .B .card { bottom: 16px; }
+  .B.open .add, .B.open .loc { display: none; }
+
+  /* C：底部工具列 */
+  .C .bar { left: 0; right: 0; bottom: 0; height: 64px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 8px;
+    border-width: 1px 0 0; border-radius: 0; }
+  .C .bar > button { background: none; border: 0; min-height: 48px; font-size: 14px; color: var(--muted); }
+  .C .bar .add { background: var(--fire); height: 44px; padding: 0 20px; color: var(--on-fire); font-size: 16px; }
+  .C .loc { right: 12px; bottom: 76px; }
+  .C .menu { bottom: 72px; right: 12px; }
+  .C .card { bottom: 76px; }
+  .C.open .loc { display: none; }
+
+  /* 篝火（取自 signature-moments.html，正式開發時只在 Campfire 元件裡） */
+  .camp { position: absolute; z-index: 1; width: 64px; height: 64px; transform: translate(-50%, -75%); background: none; border: 0; padding: 0; }
+  .camp svg { width: 100%; height: 100%; overflow: visible; }
+  .camp .lit { transform-box: fill-box; transform-origin: 50% 100%; animation: breathe 2.4s ease-in-out infinite; }
+  @keyframes breathe { 50% { transform: scale(.95, 1.05); } }
+  .spark { position: absolute; left: 50%; top: 38%; width: var(--s); height: var(--s); border-radius: 50%; background: #ffc46b;
+    box-shadow: 0 0 5px 1px rgba(224, 122, 46, .8); opacity: 0; animation: rise var(--d) var(--delay) ease-out infinite; }
+  @keyframes rise { 15% { opacity: 1; } 100% { transform: translate(var(--dx), var(--h)); opacity: 0; } }
+  .me { position: absolute; z-index: 1; left: 50%; top: 50%; width: 14px; height: 14px; margin: -7px; border-radius: 50%; background: #efe4d6; border: 3px solid #121110; outline: 1px solid #efe4d6; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; }
+    .spark { display: none; }
+  }
+</style>
+</head>
+<body>
+<h1>地圖主畫面草圖</h1>
+<p class="lead">三種擺法，地圖和篝火都一樣，只比較「新增」、個人選單、回到目前位置三個按鈕的位置。可以點：篝火 → 預覽卡；空白地圖 → 收起；選單按鈕 → 個人選單。白點是自己的位置。底圖用 DOC/asset 的草圖並調暗。</p>
+
+<div class="cols">
+  <div class="col">
+    <h2>A. 底部長按鈕</h2>
+    <p>主要動作最明顯，單手拇指正好按到；選單收在右上角。點篝火時預覽卡蓋掉新增按鈕。缺點：底部一整條擋住地圖。</p>
+    <div class="phone A">
+      <button class="ui solid icon menu-btn" aria-label="個人選單"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button>
+      <button class="ui solid icon loc" aria-label="回到目前位置"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="5"/><path d="M10 1v4M10 15v4M1 10h4M15 10h4"/></svg></button>
+      <button class="ui main add">記下一家店</button>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>B. 角落按鈕</h2>
+    <p>右下角一個方形「＋」，地圖露出最多；選單在左上角。按鈕只有符號，第一次用的人要猜一下；左上角單手不好按，但選單本來就不常用。</p>
+    <div class="phone B">
+      <button class="ui solid icon menu-btn" aria-label="個人選單"><svg viewBox="0 0 20 20"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button>
+      <button class="ui solid icon loc" aria-label="回到目前位置"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="5"/><path d="M10 1v4M10 15v4M1 10h4M15 10h4"/></svg></button>
+      <button class="ui main add" aria-label="記下一家店">＋</button>
+    </div>
+  </div>
+
+  <div class="col">
+    <h2>C. 底部工具列</h2>
+    <p>「清單」「記下」「選單」排成一列，常用的我的私房店清單一鍵到；選單剩回憶、改密碼、登出。預覽卡浮在工具列上方，新增一直按得到。缺點：最像一般 App，地圖少一條。</p>
+    <div class="phone C">
+      <button class="ui solid icon loc" aria-label="回到目前位置"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="5"/><path d="M10 1v4M10 15v4M1 10h4M15 10h4"/></svg></button>
+      <div class="ui solid bar">
+        <button data-list>我的私房店</button>
+        <button class="main add">記下一家店</button>
+        <button class="menu-btn">選單</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="flame" x1="0" y1="1" x2="0.15" y2="0">
+      <stop stop-color="#FFC65C"/><stop offset=".42" stop-color="#EE8D36"/><stop offset="1" stop-color="#B8552E" stop-opacity=".65"/>
+    </linearGradient>
+    <linearGradient id="core" x1="0" y1="1" x2=".1" y2="0">
+      <stop stop-color="#FFF2CB"/><stop offset=".5" stop-color="#F8CF83"/><stop offset="1" stop-color="#EAA35A" stop-opacity=".45"/>
+    </linearGradient>
+    <linearGradient id="charcoal" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#66503C"/><stop offset=".4" stop-color="#3C362C"/><stop offset="1" stop-color="#252923"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop stop-color="#E5A352" stop-opacity=".25"/><stop offset=".5" stop-color="#C88D4B" stop-opacity=".1"/><stop offset="1" stop-color="#A59068" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="fs" x="-50%" y="-30%" width="200%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="7"/><feComponentTransfer><feFuncA type="linear" slope=".5"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge><feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <g id="logs" fill="url(#charcoal)"><path d="M66 171 193 223 184 242 57 190Z"/><path d="m57 223 127-52 9 19-127 52Z"/></g>
+  </defs>
+</svg>
+
+<script>
+  const R = (a, b) => a + Math.random() * (b - a);
+  const FLAMES = {
+    1: ['M128 188C103 177 95 160 101 143c3-9 9-16 15-24-1 11 2 15 5 18 12-16 20-33 16-51 28 23 28 46 25 58 5-4 8-10 10-17 13 28 1 48-44 61Z',
+        'M128 188c-17-9-23-21-17-34 3 6 6 10 10 12 3-14 12-20 15-34 15 20 25 38-8 56Z'],
+    2: ['M128 188C88 170 75 145 84 117c6-19 22-32 31-48 9-16 12-33 6-48 35 25 47 58 38 91 9-6 16-16 20-25 17 27 21 48 9 67-12 18-35 27-60 34Z',
+        'M128 188c-28-13-37-29-30-47 5-15 22-26 29-40 5-9 7-17 6-25 23 22 22 44 17 60 7-4 12-9 15-15 13 28-6 52-37 67Z'],
+    3: ['M128 188c-42-14-69-34-66-66 1-14 8-27 18-39-1 17 3 27 10 32-3-26 5-45 20-64 11-15 16-30 12-45 38 27 51 59 45 92 9-6 14-14 16-25 23 28 25 51 13 73-13 23-40 35-68 42Z',
+        'M128 188c-27-10-44-26-37-50 3-9 8-16 13-22 0 11 3 18 7 22-1-21 18-38 23-61 24 23 26 45 20 61 9-4 15-12 18-21 14 34-7 57-44 71Z'],
+  };
+  const STORES = [
+    { lv: 2, x: 92, y: 170, name: '阿明麵館', price: '$$', range: '每人 150–500' },
+    { lv: 1, x: 236, y: 250, name: '巷口豆花', price: '$', range: '每人 150 以下' },
+    { lv: 3, x: 120, y: 400, name: '老王牛肉麵', price: '$$', range: '每人 150–500' },
+    { lv: 1, x: 250, y: 470, name: '夜市烤玉米', price: '', range: '' },
+  ];
+
+  function camp(s, i) {
+    const [flame, core] = FLAMES[s.lv];
+    let sparks = '';
+    for (let k = 0; k < { 1: 0, 2: 2, 3: 6 }[s.lv]; k++) {
+      sparks += `<span class="spark" style="--s:${R(1.5, 2.5)}px;--dx:${R(-10, 10)}px;--h:-${R(36, 64)}px;--d:${R(2, 3.2)}s;--delay:${R(0, 3)}s"></span>`;
+    }
+    return `<button class="camp" data-i="${i}" aria-label="${s.name}" style="left:${s.x}px;top:${s.y}px">
+      <svg viewBox="0 0 256 256" aria-hidden="true">
+        <ellipse cx="128" cy="153" rx="112" ry="100" fill="url(#halo)" opacity="${.5 + s.lv * .17}"/>
+        <g class="lit"><path fill="url(#flame)" filter="url(#fs)" d="${flame}"/><path fill="url(#core)" filter="url(#fs)" d="${core}"/></g>
+        <use href="#logs"/>
+      </svg>${sparks}</button>`;
+  }
+
+  const MENU = { A: ['我的私房店', '回憶'], B: ['我的私房店', '回憶'], C: ['回憶'] };
+  for (const p of document.querySelectorAll('.phone')) {
+    const v = ['A', 'B', 'C'].find(c => p.classList.contains(c));
+    p.insertAdjacentHTML('beforeend', STORES.map(camp).join('') + `<span class="me"></span>
+      <div class="ui solid card"><div class="name"></div><div class="price"></div>
+        <span class="open">在 Google 地圖開啟</span><span class="more">看更多 →</span></div>
+      <div class="ui solid menu">${MENU[v].map(t => `<button>${t}</button>`).join('')}<hr>
+        <button class="q">修改密碼</button><button class="q">登出</button></div>
+      <div class="ui solid toast"></div>`);
+  }
+
+  let timer;
+  function toast(p, text) {
+    p.querySelector('.toast').textContent = text;
+    p.classList.add('toasting');
+    clearTimeout(timer);
+    timer = setTimeout(() => p.classList.remove('toasting'), 1600);
+  }
+
+  document.addEventListener('click', e => {
+    const p = e.target.closest('.phone');
+    if (!p) return;
+    const c = e.target.closest('.camp');
+    if (c) {
+      const s = STORES[c.dataset.i];
+      p.querySelector('.card .name').textContent = s.name;
+      p.querySelector('.card .price').innerHTML = s.price ? `<b>${s.price}</b>${s.range}` : '';
+      p.classList.add('open');
+      p.classList.remove('menu-open');
+    } else if (e.target.closest('.menu-btn')) {
+      p.classList.toggle('menu-open');
+    } else if (e.target.closest('.add')) {
+      toast(p, '下一步：選店（另一張草圖）');
+    } else if (e.target.closest('.menu button, [data-list], .card')) {
+      toast(p, '開啟：' + (e.target.closest('.card') ? '店家頁' : e.target.textContent));
+    } else if (!e.target.closest('.ui')) {
+      p.classList.remove('open', 'menu-open');
+    }
+  });
+</script>
+</body>
+</html>
