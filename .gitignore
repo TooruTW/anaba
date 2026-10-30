@@ -39,7 +39,7 @@ Thumbs.db
 .idea/
 
 # Claude Code 個人設定
-.claude/settings.local.json
+.claude/
 
 # 地圖圖資（scripts/fetch-tiles.ps1 產生，放 R2 不進 git）
 tiles/
