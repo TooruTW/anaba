@@ -119,5 +119,5 @@
 
 ## 開發前要實測
 
-- R2 的 Range／CORS 設定是否能讓 pmtiles 正常讀取：網路調查結論為可行（2026-10-24，見上方「R2 設定」）；建立帳號、上傳圖資時再實際確認。網路上有說法指開通 R2 要綁付款方式，官方文件未寫明。
+- R2 的 Range／CORS 設定是否能讓 pmtiles 正常讀取：已測，可行（2026-10-31）。bucket `anaba-map`（Standard），Range 回 206、檔頭為 PMTiles v3；`http://localhost:3000` 的 preflight 回 204，其他網域回 403。開通 R2 需要綁信用卡，已在 Cloudflare 設定 0.01 美元的帳單警示；CORS 只擋瀏覽器，擋不住直接打網址的請求，被狂打時靠警示發現。
 - Google 短網址（`maps.app.goo.gl`）能否在伺服器端展開並取出 `0x…:0x…` 識別碼：已測，可行（2026-10-24，見 [google-short-url-test.md](google-short-url-test.md)）；地點連結有代碼，清單與圖釘沒有。部署後要從 Vercel 實打一次，確認不會被導到同意頁面或限流。
