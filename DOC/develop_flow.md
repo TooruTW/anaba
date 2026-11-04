@@ -30,7 +30,7 @@
 
 ## 開發進度
 
-最後更新：2026-10-29
+最後更新：2026-11-04
 
 | 階段 | 狀態 | 備註 |
 | --- | --- | --- |
@@ -40,10 +40,10 @@
 | 4. 技術可行性評估 | 完成 | 自訂地圖（MapLibre＋Protomaps/OSM）已驗證可行，見 custom-map-prototype.md；店家位置由使用者在地圖上點大概位置，不用任何地址轉座標服務；精確位置與導航透過使用者貼的 Google Maps 連結；技術選型已定，見 tech/stack.md；R2 經網路調查可行（建帳號時再確認）；Google 短網址展開已實測可行，見 google-short-url-test.md |
 | 5. 詳細需求 | 完成 | 情境 0～6、亮度計分公式與驗收條件（mvp-acceptance.md）已定案；架構改為自建後端 API 與登入（ADR 0002）；系統方核對只做管理 API，不做介面 |
 | 6. 最小設計與開發清單 | 完成 | 資料模型完成，見 tech/data-model.md；API 設計完成，見 tech/api.md 與 admin-api.md；design system 初版完成，見 tech/design-system.md；招牌時刻方向已定；畫面草圖完成，見 tech/stack.md「畫面風格」；開發清單見 tech/dev-checklist.md |
-| 7. 開發 MVP | 未開始 | 照 tech/dev-checklist.md 順序做 |
+| 7. 開發 MVP | 進行中 | 分 M1～M4 四個里程碑，進度與「下次從這裡開始」見 tech/dev-checklist.md |
 | 8～9 | 未開始 | |
 
-下一步：第 7 階段，從開發清單第 1 項（帳號與環境）開始。畫面風格必須是自己的，不可照搬 AI 提案或預設樣式，規則見 tech/stack.md「畫面風格」。
+下一步：見 tech/dev-checklist.md「進度」。畫面風格必須是自己的，不可照搬 AI 提案或預設樣式，規則見 tech/stack.md「畫面風格」。
 
 ## 文件安排
 
