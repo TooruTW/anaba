@@ -8,11 +8,13 @@
 
 ## 進度
 
-最後更新：2026-11-11
+最後更新：2026-11-15
 
 **M1 已達標（2026-11-11）**：手機打開 https://anaba-tau.vercel.app/api/health 回 200 `{"ok":true}`。
 
-**下次從這裡開始**：補完第 2 項剩下的 Vitest、Supabase CLI migration、PWA manifest；第 1 項只剩 Vercel 其他環境變數（邀請碼、管理 token、聯絡信箱、圖資網址），用到時再加。然後進 M2 第 4 項。
+**Supabase CLI migration 完成（2026-11-15）**：本機 `pnpm exec supabase db reset` 會套用 `supabase/migrations/`。本機資料庫要先開 Docker Desktop 再 `pnpm exec supabase start`，用完 `stop`。`20261115050806_init.sql` 目前是空的、還沒推到雲端，第 4 項可直接在裡面寫 `create extension`。雲端資料庫密碼 11-15 因外洩已重設。
+
+**下次從這裡開始**：補完第 2 項剩下的 Vitest、PWA manifest；第 1 項只剩 Vercel 其他環境變數（邀請碼、管理 token、聯絡信箱、圖資網址），用到時再加。然後進 M2 第 4 項。
 
 每次收工前更新這一段和下表的「狀態」欄（未開始／進行中／完成）。
 
